@@ -1,0 +1,65 @@
+@import "./libs/font.scss";
+
+* {
+  padding: 0;
+  margin: 0;
+  color: unset;
+  text-decoration: unset;
+  list-style-type: none;
+}
+
+html {
+  font-family: "Space Grotesk", sans-serif;
+  background: black;
+}
+
+.desktop {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+// Wallpaper
+.wallpaper-top {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 500px;
+  color: transparent;
+  -webkit-text-stroke: 1px white;
+  pointer-events: none;
+  user-select: none;
+}
+
+.wallpaper-bottom {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 500px;
+  color: white;
+  z-index: -1;
+  pointer-events: none;
+  user-select: none;
+}
+
+//File
+.file {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  background: red;
+
+  p {
+    user-select: none;
+  }
+}
