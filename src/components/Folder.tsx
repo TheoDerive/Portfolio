@@ -1,37 +1,31 @@
 import React from "react";
-
-import { FileType } from "../type/filesType";
-import { useAppStore } from "../store";
-import { new_window } from "../utils/window_gestion";
+import { FolderType } from "../type/filesType";
 
 type Props = {
-  file: FileType;
+  folder: FolderType;
   prev_position: [number, number];
 };
 
 const windowWidth = window.innerWidth;
 const windowHeight = window.innerHeight;
 
-export default function File({ file, prev_position }: Props) {
-  const fileRef = React.useRef<HTMLElement>(null);
+export default function Folder({ folder, prev_position }: Props) {
+  const folderRef = React.useRef<HTMLElement>(null);
   const [isClick, setIsClick] = React.useState<boolean>(false);
   const [position, setPosition] =
     React.useState<[number, number]>(prev_position);
 
-  const { setWindows, windows } = useAppStore();
-
   React.useEffect(() => {
-    if (!fileRef.current) return;
+    if (!folderRef.current) return;
 
     const moveFile = (mouse: MouseEvent) => {
-      if (!isClick || !fileRef.current) return;
-      const width = fileRef.current.getBoundingClientRect().width;
-      const height = fileRef.current.getBoundingClientRect().height;
-      const Top = fileRef.current.getBoundingClientRect().top;
-      const Bottom = fileRef.current.getBoundingClientRect().bottom;
-      const Left = fileRef.current.getBoundingClientRect().left;
-      const Right = fileRef.current.getBoundingClientRect().right;
-      console.log(Left);
+      if (!isClick || !folderRef.current) return;
+      const width = folderRef.current.getBoundingClientRect().width;
+      const height = folderRef.current.getBoundingClientRect().height;
+      const Top = folderRef.current.getBoundingClientRect().top;
+      const Bottom = folderRef.current.getBoundingClientRect().bottom;
+      const Left = folderRef.current.getBoundingClientRect().left;
+      const Right = folderRef.current.getBoundingClientRect().right;
 
       if (Top - 1 < 9) {
         setPosition([15, mouse.clientX - 15]);
@@ -59,26 +53,17 @@ export default function File({ file, prev_position }: Props) {
     return () => {
       window.removeEventListener("mousemove", moveFile);
     };
-  }, [isClick, fileRef]);
+  }, [isClick, folderRef]);
 
   return (
     <article
-      ref={fileRef}
+      ref={folderRef}
       onMouseDown={() => setIsClick(true)}
       onMouseUp={() => setIsClick(false)}
-      onDoubleClick={() =>
-        new_window(windows, setWindows, {
-          name: "window_test",
-          content: "test",
-          id: 50,
-          isActive: true,
-          isMinimize: false,
-        })
-      }
-      className="file"
+      className="folder"
       style={{ top: `${position[0] + 15}px`, left: `${position[1] + 15}px` }}
     >
-      <p>{file.name}</p>
+      <p>{folder.name}</p>
     </article>
   );
 }
