@@ -7,6 +7,8 @@ export type FileType = {
   author: string;
   type: "file";
   content?: string;
+  position: [number, number];
+  size: [number, number];
 };
 
 export type FolderType = {
@@ -17,6 +19,8 @@ export type FolderType = {
   childs: Array<FileType | FolderType>;
   icon: string;
   type: "folder";
+  position: [number, number];
+  size: [number, number];
 };
 
 export type PathType = (FileType | FolderType)[];

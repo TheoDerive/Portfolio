@@ -9,6 +9,8 @@ export const files: PathType = [
     icon: "",
     author: "Thyo",
     fileType: "text",
+    position: [150, 30],
+    size: [70, 70],
   },
   {
     id: 1,
@@ -18,5 +20,18 @@ export const files: PathType = [
     name: "folder",
     childs: [],
     path: "/folder",
+    position: [100, 15],
+    size: [70, 70],
+  },
+  {
+    id: 3,
+    type: "file",
+    name: "test",
+    path: "/test",
+    icon: "",
+    author: "Thyo",
+    fileType: "text",
+    position: [240, 15],
+    size: [70, 70],
   },
 ];

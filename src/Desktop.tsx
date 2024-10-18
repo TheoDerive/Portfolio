@@ -26,7 +26,11 @@ export default function Desktop() {
       })}
 
       {windows.map((window) => (
-        <Window key={window.id} window={window} prev_position={[30, 30]} />
+        <Window
+          key={window.id}
+          window_element={window}
+          prev_position={[30, 30]}
+        />
       ))}
     </section>
   );

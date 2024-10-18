@@ -31,6 +31,18 @@ canvas {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: black;
+    opacity: 0.5;
+    z-index: -1;
+  }
 }
 
 // Wallpaper
@@ -44,18 +56,6 @@ canvas {
   -webkit-text-stroke: 1px white;
   pointer-events: none;
   user-select: none;
-
-  &::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background: black;
-    opacity: 0.5;
-    z-index: -1;
-  }
 }
 
 .wallpaper-bottom {
@@ -73,7 +73,6 @@ canvas {
 //File
 .file,
 .folder {
-  height: 30px;
   position: absolute;
   transform: translate(-50%, -50%);
   background: red;
@@ -88,7 +87,14 @@ canvas {
 .window {
   background: blue;
   position: absolute;
-  width: auto;
-  overflow: scroll;
-  height: auto;
+  height: 40vh;
+  width: 80vw;
+  max-width: 100vw;
+  max-height: 100vh;
+  transform: translate(-50%, -50%);
+
+  p {
+    user-select: none;
+    pointer-events: none;
+  }
 }
