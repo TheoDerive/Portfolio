@@ -1,36 +1,31 @@
-import File from "./components/File";
-import Folder from "./components/Folder";
 import Wallpaper from "./components/Wallpaper";
-import { files } from "./data/files";
-import { useAppStore } from "./store";
-import Window from "./components/Window";
+import useFilesGrid from "./hooks/useFilesGrid";
 
 export default function Desktop() {
-  const { windows } = useAppStore();
+  const { filesGrid, sendTo } = useFilesGrid();
 
   return (
     <section className="desktop">
       <Wallpaper />
 
-      {files.map((element) => {
-        switch (element.type) {
-          case "file":
-            return <File prev_position={[20, 20]} file={element} />;
-
-          case "folder":
-            return <Folder prev_position={[50, 20]} folder={element} />;
-
-          default:
-            return null;
-        }
-      })}
-
-      {windows.map((window) => (
-        <Window
-          key={window.id}
-          window_element={window}
-          prev_position={[30, 30]}
-        />
+      {filesGrid.map((column, index) => (
+        <section key={index + 1} id={`${index + 1}`} className="column">
+          {column.map((grid) => (
+            <div
+              key={grid.id}
+              onClick={() => sendTo(grid.id, 11)}
+              id={`${grid.id}`}
+              className="grid"
+            >
+              {grid.content ? (
+                <span>
+                  {grid.id}
+                  {grid.content.name}
+                </span>
+              ) : null}
+            </div>
+          ))}
+        </section>
       ))}
     </section>
   );

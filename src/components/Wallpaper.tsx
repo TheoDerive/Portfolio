@@ -9,7 +9,7 @@ export default function Wallpaper() {
   return (
     <>
       <h1 className="wallpaper-bottom">THYO</h1>
-      <Canvas camera={{ position: [3, 0, 0] }}>
+      <Canvas style={{ position: "absolute" }} camera={{ position: [3, 0, 0] }}>
         <ambientLight intensity={1.5} />
         <Person position={[1.8, 0, 0]} />
 
