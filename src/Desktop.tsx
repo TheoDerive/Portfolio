@@ -2,7 +2,7 @@ import Wallpaper from "./components/Wallpaper";
 import useFilesGrid from "./hooks/useFilesGrid";
 
 export default function Desktop() {
-  const { filesGrid, sendTo } = useFilesGrid();
+  const { filesGrid, can_send_file_to } = useFilesGrid();
 
   return (
     <section className="desktop">
@@ -13,7 +13,7 @@ export default function Desktop() {
           {column.map((grid) => (
             <div
               key={grid.id}
-              onClick={() => sendTo(grid.id, 11)}
+              onClick={() => can_send_file_to(grid, 10)}
               id={`${grid.id}`}
               className="grid"
             >

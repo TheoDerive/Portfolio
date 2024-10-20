@@ -3,6 +3,9 @@ export type File = {
   name: string;
   content?: string;
   type: "file";
+  onDesktop?: {
+    id: number;
+  };
 };
 
 export type Folder = {
@@ -10,6 +13,9 @@ export type Folder = {
   name: string;
   content?: (File | Folder)[];
   type: "folder";
+  onDesktop?: {
+    id: number;
+  };
 };
 
 export type GridType = {
@@ -18,6 +24,10 @@ export type GridType = {
 };
 
 export type FilesGrid = [
+  GridType[],
+  GridType[],
+  GridType[],
+  GridType[],
   GridType[],
   GridType[],
   GridType[],
