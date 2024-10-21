@@ -1,13 +1,10 @@
 import React from "react";
 import { File, FilesGrid, Folder, GridType } from "../type/filesGridType";
 import { pathElement } from "../data/pathElement";
+import { useAppStore } from "../store";
 
 export default function useFilesGrid() {
-  const [filesGrid, setFilesGrid] = React.useState<FilesGrid | []>([]);
-
-  React.useEffect(() => {
-    setFilesGrid(init());
-  }, []);
+  const { filesGrid, setFilesGrid } = useAppStore();
 
   function init(): FilesGrid {
     // Create an empty array to prepare the return value
@@ -258,5 +255,5 @@ export default function useFilesGrid() {
     }
   }
 
-  return { filesGrid, can_send_file_to };
+  return { init, can_send_file_to };
 }
