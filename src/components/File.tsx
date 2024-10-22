@@ -11,6 +11,7 @@ export default function FileElement({
   grid: GridType;
   parentRef: RefObject<HTMLDivElement>;
 }) {
+  const [asMove, setAsMove] = React.useState(false);
   const [isClick, setIsClick] = React.useState(false);
   const [newIdGrid, setNewIdGrid] = React.useState<number | null>(null);
   const childRef = React.useRef<HTMLElement>(null);
@@ -28,11 +29,6 @@ export default function FileElement({
     childRef.current.style.width = `${grid_size.width}px`;
     childRef.current.style.height = `${grid_size.height}px`;
 
-    parentRef.current.style.position = "unset";
-    childRef.current.style.position = "absolute";
-    childRef.current.style.transform = "translate(-50%, -50%)";
-    childRef.current.style.pointerEvents = "none";
-
     setIsClick(true);
   };
 
@@ -46,6 +42,7 @@ export default function FileElement({
     childRef.current.style.position = "unset";
     childRef.current.style.transform = "translate(0%, 0%)";
     childRef.current.style.pointerEvents = "auto";
+    childRef.current.style.zIndex = "unset";
 
     setIsClick(false);
 
@@ -56,13 +53,13 @@ export default function FileElement({
 
   React.useEffect(() => {
     const handleMove = (mouse: MouseEvent) => {
-      if (!isClick || !childRef.current) return;
+      if (!isClick || !childRef.current || !mouse.target) return;
+      console.log("move");
 
       childRef.current.style.top = `${mouse.clientY}px`;
       childRef.current.style.left = `${mouse.clientX}px`;
 
       if (mouse.target.className === "grid") {
-        console.log(mouse.target.id);
         setNewIdGrid(Number(mouse.target.id));
       }
 
@@ -70,10 +67,7 @@ export default function FileElement({
         setNewIdGrid(Number(mouse.target.parentElement.id));
       }
 
-      setPosition({
-        x: mouse.clientX,
-        y: mouse.clientY,
-      });
+      setAsMove(true);
     };
     const handleMouseUp = () => {
       if (isClick) reset();
@@ -88,6 +82,16 @@ export default function FileElement({
     };
   }, [isClick, newIdGrid, childRef]);
 
+  React.useEffect(() => {
+    if (asMove && isClick && childRef.current && parentRef.current) {
+      parentRef.current.style.position = "unset";
+      childRef.current.style.position = "absolute";
+      childRef.current.style.transform = "translate(-50%, -50%)";
+      childRef.current.style.pointerEvents = "none";
+      childRef.current.style.zIndex = "999";
+    }
+  }, [asMove, isClick, childRef, parentRef]);
+
   return (
     <article
       onMouseDown={(e) => handleClick()}
@@ -95,6 +99,9 @@ export default function FileElement({
       className="file"
       id={`${file.id}`}
     >
+      <div className="file-image-container">
+        <img className="file-image" src="/images/File-top.svg" />
+      </div>
       {file.name}
     </article>
   );

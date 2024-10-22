@@ -1,4 +1,3 @@
-import React from "react";
 import { File, FilesGrid, Folder, GridType } from "../type/filesGridType";
 import { pathElement } from "../data/pathElement";
 import { useAppStore } from "../store";
@@ -181,9 +180,7 @@ export default function useFilesGrid() {
                     grid_saved.current_destination + 3;
 
                   grid_saved.current_content = grid.content;
-                  grid_saved.current_destinationColumnIndex = check_id_size(
-                    grid_saved.current_destination,
-                  );
+                  grid_saved.current_destinationColumnIndex += 1;
                 } else {
                   // Else say to grid_saved to go to the next grid
                   grid_saved.current_content = grid.content;
@@ -200,9 +197,21 @@ export default function useFilesGrid() {
               }
 
               // If it is the first iteration
-              // Say to grid_saved to go to the next one
-              grid_saved.current_id = grid.id + 1;
-              grid_saved.current_destination += 1;
+              // If the grid is the last one of the column
+              if (
+                Number(String(grid.id)[Number(String(grid.id).length) - 1]) ===
+                7
+              ) {
+                //Say to grid_saved to go to the next column
+                grid_saved.current_id = grid.id + 3;
+                grid_saved.current_destination += 3;
+
+                grid_saved.current_destinationColumnIndex += 1;
+              } else {
+                // Else say to grid_saved to go to the next grid
+                grid_saved.current_id = grid.id + 1;
+                grid_saved.current_destination += 1;
+              }
 
               // Add the first iteration
               grid_saved.timer = 1;
