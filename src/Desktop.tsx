@@ -3,6 +3,7 @@ import Wallpaper from "./components/Wallpaper";
 import useFilesGrid from "./hooks/useFilesGrid";
 import { useAppStore } from "./store";
 import FileElement from "./components/File";
+import FolderElement from "./components/Folder";
 
 export default function Desktop() {
   const gridParentRef = React.useRef<HTMLDivElement>(null);
@@ -36,7 +37,14 @@ export default function Desktop() {
                       file={grid.content}
                       parentRef={gridParentRef}
                     />
-                  ) : null}
+                  ) : (
+                    <FolderElement
+                      key={grid.content.id}
+                      grid={grid}
+                      folder={grid.content}
+                      parentRef={gridParentRef}
+                    />
+                  )}
                 </>
               ) : null}
             </div>

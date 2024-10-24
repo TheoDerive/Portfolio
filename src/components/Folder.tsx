@@ -1,15 +1,16 @@
 import React, { RefObject } from "react";
+import { Folder, GridType } from "../type/filesGridType";
 import useFilesGrid from "../hooks/useFilesGrid";
-import { File, GridType } from "../type/filesGridType";
+import DominantFileInFolder from "./DominantFileInFolder";
 
-export default function FileElement({
-  file,
-  grid,
+export default function FolderElement({
+  folder,
   parentRef,
+  grid,
 }: {
-  file: File;
-  grid: GridType;
+  folder: Folder;
   parentRef: RefObject<HTMLDivElement>;
+  grid: GridType;
 }) {
   const [asMove, setAsMove] = React.useState(false);
   const [isClick, setIsClick] = React.useState(false);
@@ -100,13 +101,14 @@ export default function FileElement({
     <article
       onMouseDown={() => handleClick()}
       ref={childRef}
-      className="file"
-      id={`${file.id}`}
+      className="folder"
+      id={`${folder.id}`}
     >
-      <div className="file-image-container">
-        <img className="file-image" src="/images/File-text-top.svg" />
+      <div className="folder-image-container">
+        <img className="folder-image" src="/images/Folder-top.svg" />
+        <DominantFileInFolder folder={folder} />
       </div>
-      {file.name}
+      {folder.name}
     </article>
   );
 }
