@@ -23,17 +23,4 @@ export type GridType = {
   content: File | Folder | null;
 };
 
-export type FilesGrid = [
-  GridType[],
-  GridType[],
-  GridType[],
-  GridType[],
-  GridType[],
-  GridType[],
-  GridType[],
-  GridType[],
-  GridType[],
-  GridType[],
-  GridType[],
-  GridType[],
-];
+export type FilesGrid = GridType[][];

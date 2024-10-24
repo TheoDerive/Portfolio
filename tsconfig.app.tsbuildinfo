@@ -1,0 +1,1 @@
+{"root":["./src/Desktop.tsx","./src/main.tsx","./src/store.ts","./src/vite-env.d.ts","./src/components/File.tsx","./src/components/Wallpaper.tsx","./src/data/pathElement.ts","./src/data/store.ts","./src/hooks/useFilesGrid.tsx","./src/interface/storeInterface.ts","./src/model/Person.tsx","./src/type/filesGridType.ts"],"version":"5.6.3"}
