@@ -59,12 +59,17 @@ export default function FileElement({
       childRef.current.style.top = `${mouse.clientY}px`;
       childRef.current.style.left = `${mouse.clientX}px`;
 
-      if (mouse.target.className === "grid") {
-        setNewIdGrid(Number(mouse.target.id));
+      const mouseTarget = mouse.target as HTMLElement;
+
+      if (mouseTarget.className === "grid") {
+        setNewIdGrid(Number(mouseTarget.id));
       }
 
-      if (mouse.target.className === "file") {
-        setNewIdGrid(Number(mouse.target.parentElement.id));
+      if (
+        (mouseTarget.className === "file" && mouseTarget.parentElement) ||
+        (mouseTarget.className === "folder" && mouseTarget.parentElement)
+      ) {
+        setNewIdGrid(Number(mouseTarget.parentElement.id));
       }
 
       setAsMove(true);
@@ -94,7 +99,7 @@ export default function FileElement({
 
   return (
     <article
-      onMouseDown={(e) => handleClick()}
+      onMouseDown={() => handleClick()}
       ref={childRef}
       className="file"
       id={`${file.id}`}
