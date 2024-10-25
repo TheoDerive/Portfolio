@@ -2,6 +2,8 @@ import React, { RefObject } from "react";
 import { Folder, GridType } from "../type/filesGridType";
 import useFilesGrid from "../hooks/useFilesGrid";
 import DominantFileInFolder from "./DominantFileInFolder";
+import { Window } from "../type/windowType";
+import { useAppStore } from "../data/store";
 
 export default function FolderElement({
   folder,
@@ -18,6 +20,7 @@ export default function FolderElement({
   const childRef = React.useRef<HTMLElement>(null);
 
   const { can_send_file_to } = useFilesGrid();
+  const { setWindow, windows } = useAppStore()
 
   const handleClick = () => {
     if (!parentRef.current || !childRef.current) return;
@@ -32,6 +35,16 @@ export default function FolderElement({
 
     setIsClick(true);
   };
+
+    const handleDoubleClick = () => {
+      const new_window: Window = {
+        id: 200,
+        name: folder.name,
+        path: folder.path
+      }
+  
+      setWindow([...windows, new_window])
+  }
 
   const reset = () => {
     if (!parentRef.current || !childRef.current) return;
@@ -103,6 +116,7 @@ export default function FolderElement({
       ref={childRef}
       className="folder"
       id={`${folder.id}`}
+      onDoubleClick={() => handleDoubleClick()}
     >
       <div className="folder-image-container">
         <img className="folder-image" src="/images/Folder-top.svg" />

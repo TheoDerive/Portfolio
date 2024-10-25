@@ -1,6 +1,8 @@
 import React, { RefObject } from "react";
 import useFilesGrid from "../hooks/useFilesGrid";
 import { File, GridType } from "../type/filesGridType";
+import { useAppStore } from "../data/store";
+import { Window } from "../type/windowType";
 
 export default function FileElement({
   file,
@@ -17,6 +19,7 @@ export default function FileElement({
   const childRef = React.useRef<HTMLElement>(null);
 
   const { can_send_file_to } = useFilesGrid();
+  const { setWindow, windows } = useAppStore()
 
   const handleClick = () => {
     if (!parentRef.current || !childRef.current) return;
@@ -31,6 +34,16 @@ export default function FileElement({
 
     setIsClick(true);
   };
+
+  const handleDoubleClick = () => {
+      const new_window: Window = {
+        id: 200,
+        name: file.name,
+        path: file.path
+      }
+  
+      setWindow([...windows, new_window])
+  }
 
   const reset = () => {
     if (!parentRef.current || !childRef.current) return;
@@ -99,6 +112,7 @@ export default function FileElement({
   return (
     <article
       onMouseDown={() => handleClick()}
+      onDoubleClick={() => handleDoubleClick()}
       ref={childRef}
       className="file"
       id={`${file.id}`}

@@ -1,14 +1,15 @@
 import React from "react";
 import Wallpaper from "./components/Wallpaper";
 import useFilesGrid from "./hooks/useFilesGrid";
-import { useAppStore } from "./store";
+import { useAppStore } from "./data/store";
 import FileElement from "./components/File";
 import FolderElement from "./components/Folder";
+import WindowElement from "./components/Window";
 
 export default function Desktop() {
   const gridParentRef = React.useRef<HTMLDivElement>(null);
 
-  const { filesGrid, setFilesGrid } = useAppStore();
+  const { filesGrid, setFilesGrid, windows } = useAppStore();
   const { init } = useFilesGrid();
 
   React.useEffect(() => {
@@ -51,6 +52,11 @@ export default function Desktop() {
           ))}
         </section>
       ))}
+
+      {
+        windows.map(window => <WindowElement key={window.id} window={window} />)
+      }
     </section>
+
   );
 }

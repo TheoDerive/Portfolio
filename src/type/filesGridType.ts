@@ -6,6 +6,7 @@ export type File = {
   content?: string;
   type: "file";
   fileType: FileType;
+  path: string,
   onDesktop?: {
     id: number;
   };
@@ -14,6 +15,7 @@ export type File = {
 export type Folder = {
   id: number;
   name: string;
+  path: string,
   content: (File | Folder)[];
   type: "folder";
   onDesktop?: {

@@ -1,6 +1,6 @@
 import { File, FilesGrid, Folder, GridType } from "../type/filesGridType";
 import { pathElement } from "../data/pathElement";
-import { useAppStore } from "../store";
+import { useAppStore } from "../data/store";
 
 export default function useFilesGrid() {
   const { filesGrid, setFilesGrid } = useAppStore();
