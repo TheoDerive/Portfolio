@@ -236,16 +236,15 @@ canvas {
   background: #3c3836;
   z-index: 500;
   border-radius: 10px;
-  transition-duration: .3s;
-  transition-property: width, height;
 
-  p, svg {
+  p,
+  svg {
     user-select: none;
   }
 
   .window-header {
     width: 100%;
-    background: rgba($color: black, $alpha: .5);
+    background: rgba($color: black, $alpha: 0.5);
     border-bottom: 1px solid black;
     display: flex;
     align-items: center;
@@ -271,13 +270,13 @@ canvas {
 
       .minimize-button {
         position: relative;
-        
+
         &::after {
           content: "";
           position: absolute;
           top: 50%;
           left: 50%;
-          transform: translate(-50%, -50%); 
+          transform: translate(-50%, -50%);
           width: 30%;
           height: 1px;
           background: white;
@@ -286,13 +285,13 @@ canvas {
 
       .close-button {
         position: relative;
-        
+
         &::after {
           content: "";
           position: absolute;
           top: 50%;
           left: 50%;
-          transform: translate(-50%, -50%) rotate(45deg); 
+          transform: translate(-50%, -50%) rotate(45deg);
           width: 30%;
           height: 1px;
           background: white;
@@ -303,13 +302,48 @@ canvas {
           position: absolute;
           top: 50%;
           left: 50%;
-          transform: translate(-50%, -50%) rotate(135deg); 
+          transform: translate(-50%, -50%) rotate(135deg);
           width: 30%;
           height: 1px;
           background: white;
         }
       }
+    }
+  }
 
-    } 
+  .right-resize {
+    position: absolute;
+    width: 15px;
+    height: 93.5%;
+    right: -15px;
+    bottom: 0;
+    cursor: w-resize;
+  }
+
+  .left-resize {
+    position: absolute;
+    width: 15px;
+    height: 100%;
+    left: -15px;
+    bottom: 0;
+    cursor: e-resize;
+  }
+
+  .top-resize {
+    position: absolute;
+    height: 15px;
+    width: 100%;
+    top: -15px;
+    left: 0;
+    cursor: s-resize;
+  }
+
+  .bottom-resize {
+    position: absolute;
+    height: 15px;
+    width: 100%;
+    bottom: -15px;
+    left: 0;
+    cursor: n-resize;
   }
 }
