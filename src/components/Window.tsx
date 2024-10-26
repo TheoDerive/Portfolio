@@ -9,7 +9,7 @@ import { PositionType } from "../type/positionType";
 import { useAppStore } from "../data/store";
 
 type Props = {
-  window: Window;
+  windowProps: Window;
 };
 
 const initPosition: PositionType = {
@@ -17,11 +17,11 @@ const initPosition: PositionType = {
   y: window.innerHeight / 2,
 };
 
-export default function WindowElement({ window }: Props) {
+export default function WindowElement({ windowProps }: Props) {
   const [position, setPosition] = React.useState<PositionType>(initPosition);
-  const [prevSize, setPrevSize] = React.useState<PositionType>({
-    x: 70,
-    y: 70,
+  const [prevSize, setPrevSize] = React.useState({
+    x: (window.innerWidth / 100) * 70,
+    y: (window.innerHeight / 100) * 70,
   });
   const [isFullScreen, setIsFullScreen] = React.useState<boolean>(false);
   const [isClick, setIsClick] = React.useState(false);
@@ -104,21 +104,55 @@ export default function WindowElement({ window }: Props) {
       windowRef.current.style.left = "0";
       windowRef.current.style.zIndex = "999";
     } else {
-      windowRef.current.style.width = `${prevSize.x}vw`;
-      windowRef.current.style.height = `${prevSize.y}vh`;
-      if (position.x === initPosition.x && position.y === initPosition.y) {
-        windowRef.current.style.transform = "translate(-50%, -50%)";
-      }
+      windowRef.current.style.width = `${prevSize.x}px`;
+      windowRef.current.style.height = `${prevSize.y}px`;
+      windowRef.current.style.transform = "translate(-50%, -50%)";
       windowRef.current.style.top = `${position.y}px`;
       windowRef.current.style.left = `${position.x}px`;
     }
   }, [isFullScreen, windowRef]);
 
+  const handleResizeMouseDown = (
+    e: React.MouseEvent<HTMLDivElement | MouseEvent>,
+    direction: string,
+  ) => {
+    if (!windowRef.current) return;
+
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const startWidth = windowRef.current.offsetWidth;
+    const startHeight = windowRef.current.offsetHeight;
+
+    const handleResizeMouseMove = (e: MouseEvent) => {
+      let newWidth = startWidth;
+      let newHeight = startHeight;
+      if (direction === "right") newWidth += e.clientX - startX;
+      if (direction === "left") newWidth -= e.clientX - startX;
+      if (direction === "bottom") newHeight += e.clientY - startY;
+      if (direction === "top") newHeight -= e.clientY - startY;
+
+      setPrevSize({ x: newWidth, y: newHeight });
+    };
+
+    const handleResizeMouseUp = () => {
+      document.removeEventListener("mousemove", handleResizeMouseMove);
+      document.removeEventListener("mouseup", handleResizeMouseUp);
+    };
+
+    document.addEventListener("mousemove", handleResizeMouseMove);
+    document.addEventListener("mouseup", handleResizeMouseUp);
+  };
+
   return (
     <section
       ref={windowRef}
       className="window"
-      style={{ top: `${position.y}px`, left: `${position.x}px` }}
+      style={{
+        top: `${position.y}px`,
+        left: `${position.x}px`,
+        width: `${prevSize.x}px`,
+        height: `${prevSize.y}px`,
+      }}
     >
       <section
         onMouseDown={(e) => handleMouseDown(e)}
@@ -126,7 +160,7 @@ export default function WindowElement({ window }: Props) {
         ref={windowMoveRef}
       >
         <div style={{ width: "110px" }}></div>
-        <p className="window-header-name">{window.name}</p>
+        <p className="window-header-name">{windowProps.name}</p>
 
         <div className="window-header-buttons">
           <button className="minimize-button"></button>
@@ -147,7 +181,7 @@ export default function WindowElement({ window }: Props) {
             className="close-button"
             onClick={() => {
               const remove_window = windows.filter(
-                (windowFil) => windowFil.id !== window.id,
+                (windowFil) => windowFil.id !== windowProps.id,
               );
 
               setWindow(remove_window);
@@ -156,11 +190,22 @@ export default function WindowElement({ window }: Props) {
         </div>
       </section>
 
-      <div className="right-resize" />
-      <div className="left-resize" />
-      <div className="top-resize" />
-      <div className="bottom-resize" />
+      <div
+        className="right-resize"
+        onMouseDown={(e) => handleResizeMouseDown(e, "right")}
+      />
+      <div
+        className="left-resize"
+        onMouseDown={(e) => handleResizeMouseDown(e, "left")}
+      />
+      <div
+        className="top-resize"
+        onMouseDown={(e) => handleResizeMouseDown(e, "top")}
+      />
+      <div
+        className="bottom-resize"
+        onMouseDown={(e) => handleResizeMouseDown(e, "bottom")}
+      />
     </section>
   );
 }
-

@@ -53,10 +53,9 @@ export default function Desktop() {
         </section>
       ))}
 
-      {
-        windows.map(window => <WindowElement key={window.id} window={window} />)
-      }
+      {windows.map((window) => (
+        <WindowElement key={window.id} windowProps={window} />
+      ))}
     </section>
-
   );
 }

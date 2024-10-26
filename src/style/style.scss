@@ -236,8 +236,6 @@ canvas {
   background: #3c3836;
   z-index: 500;
   border-radius: 10px;
-  transition-duration: 0.3s;
-  transition-property: width, height;
 
   p,
   svg {
@@ -319,7 +317,7 @@ canvas {
     height: 93.5%;
     right: -15px;
     bottom: 0;
-    background: red;
+    cursor: w-resize;
   }
 
   .left-resize {
@@ -328,7 +326,7 @@ canvas {
     height: 100%;
     left: -15px;
     bottom: 0;
-    background: red;
+    cursor: e-resize;
   }
 
   .top-resize {
@@ -337,7 +335,7 @@ canvas {
     width: 100%;
     top: -15px;
     left: 0;
-    background: red;
+    cursor: s-resize;
   }
 
   .bottom-resize {
@@ -346,7 +344,6 @@ canvas {
     width: 100%;
     bottom: -15px;
     left: 0;
-    background: red;
+    cursor: n-resize;
   }
 }
-
