@@ -4,9 +4,9 @@ export const pathElement: (File | Folder)[] = [
   {
     id: 3000,
     name: "File",
-    type: "file",
-    path: "/",
-    fileType: "text",
+    type: "text",
+    content: "coucou",
+    path: "/File",
     onDesktop: {
       id: 120,
     },
@@ -15,8 +15,17 @@ export const pathElement: (File | Folder)[] = [
     id: 3001,
     name: "Folder",
     type: "folder",
-    path: "/",
-    content: [],
+    path: "/Folder",
+
+    content: [
+      {
+        id: 3000,
+        name: "name",
+        type: "text",
+        content: "coucou",
+        path: "/Folder/name",
+      },
+    ],
     onDesktop: {
       id: 130,
     },

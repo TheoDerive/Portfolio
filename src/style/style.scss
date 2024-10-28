@@ -237,6 +237,15 @@ canvas {
   z-index: 500;
   border-radius: 10px;
 
+  &-fullscreen {
+    width: 100vw !important;
+    height: 100vh !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 999 !important;
+    transform: unset !important;
+  }
+
   p,
   svg {
     user-select: none;
