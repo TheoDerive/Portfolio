@@ -1,5 +1,6 @@
 import React, { memo } from "react";
 import { FileType, Folder } from "../type/filesGridType";
+import { isFile } from "../utils/verifElementType";
 
 const DominantFileInFolder = memo(({ folder }: { folder: Folder }) => {
   const [dominantFiles, setDominantFiles] = React.useState<FileType[]>([]);
@@ -11,18 +12,20 @@ const DominantFileInFolder = memo(({ folder }: { folder: Folder }) => {
       image: number;
       code: number;
       default: number;
+      folder: number;
     } = {
       text: 0,
       image: 0,
       code: 0,
       default: 0,
+      folder: 0,
     };
 
     for (let index = 0; index < folder.content.length; index++) {
       const element = folder.content[index];
 
-      if (element.type === "file") {
-        result[element.fileType] = result[element.fileType] + 1;
+      if (isFile(element)) {
+        result[element.type] = result[element.type] + 1;
       }
     }
     const sortedValues = Object.entries(result)

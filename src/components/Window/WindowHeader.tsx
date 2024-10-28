@@ -86,7 +86,7 @@ const WindowHeader = ({
         <button className="minimize-button"></button>
         <button
           className="fullscreen-button"
-          onClick={() => setIsFullScreen((prev) => !prev)}
+          onClick={() => setIsFullScreen(!isFullScreen)}
         >
           <FontAwesomeIcon
             icon={

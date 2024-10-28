@@ -21,6 +21,7 @@ const WindowElement = ({ windowProps }: Props) => {
     w: (window.innerWidth / 100) * 70,
     h: (window.innerHeight / 100) * 70,
   });
+
   const [path, setPath] = React.useState(windowProps.path);
 
   const windowRef = React.useRef<HTMLElement>(null);
