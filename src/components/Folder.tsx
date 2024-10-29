@@ -1,11 +1,10 @@
 import React, { RefObject } from "react";
 import useFilesGrid from "../hooks/useFilesGrid";
 import { Folder, GridType } from "../type/filesGridType";
-import { useAppStore } from "../data/store";
-import { Window } from "../type/windowType";
 import useMove from "../hooks/useMove";
 import { PositionType } from "../type/vectorType";
 import DominantFileInFolder from "./DominantFileInFolder";
+import useWindowPriority from "../hooks/useWindowPriority";
 
 const FolderElement = ({
   folder,
@@ -41,7 +40,7 @@ const FolderElement = ({
     setAsMove,
   );
   const { can_send_file_to } = useFilesGrid();
-  const { setWindow, windows } = useAppStore();
+  const { newWindow } = useWindowPriority();
 
   React.useEffect(() => {
     if (!childRef.current) return;
@@ -81,14 +80,7 @@ const FolderElement = ({
     if (setPath) {
       setPath(folder.path);
     } else {
-      const new_window: Window = {
-        id: folder.id * 20,
-        name: folder.name,
-        path: `${folder.path}`,
-        type: folder.type,
-      };
-
-      setWindow([...windows, new_window]);
+      newWindow(folder);
     }
   };
 

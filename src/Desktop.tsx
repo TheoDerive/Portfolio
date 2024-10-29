@@ -6,6 +6,7 @@ import FileElement from "./components/File";
 import FolderElement from "./components/Folder";
 import WindowElement from "./components/Window";
 import { isFile } from "./utils/verifElementType";
+import Header from "./components/Header";
 
 const Desktop = () => {
   const gridParentRef = React.useRef<HTMLDivElement>(null);
@@ -21,6 +22,7 @@ const Desktop = () => {
 
   return (
     <section className="desktop">
+      <Header />
       <Wallpaper />
 
       {filesGrid.map((column, index) => (
@@ -56,9 +58,11 @@ const Desktop = () => {
         </section>
       ))}
 
-      {windows.map((window) => (
-        <WindowElement key={window.id} windowProps={window} />
-      ))}
+      {windows.map((window) =>
+        window.snooze ? null : (
+          <WindowElement key={window.id} windowProps={window} />
+        ),
+      )}
     </section>
   );
 };

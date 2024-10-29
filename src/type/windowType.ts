@@ -5,5 +5,11 @@ export type Window = {
   name: string;
   path: string;
   type: FileType;
+  snooze: boolean;
 };
 
+export type WindowIdentification = {
+  id: number;
+  name: string;
+  snooze: boolean;
+};

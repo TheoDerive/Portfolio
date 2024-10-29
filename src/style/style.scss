@@ -19,6 +19,14 @@ html {
   height: 100vh;
   overflow: hidden;
   position: relative;
+  padding-top: 40px;
+
+  .desktop-header {
+    position: absolute;
+    width: 100vw;
+    height: 40px;
+    background: red;
+  }
 }
 
 canvas {
@@ -236,6 +244,8 @@ canvas {
   background: #3c3836;
   z-index: 500;
   border-radius: 10px;
+  border: 1px solid black;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 
   &-fullscreen {
     width: 100vw !important;

@@ -6,8 +6,8 @@ import {
   faUpRightAndDownLeftFromCenter,
 } from "@fortawesome/free-solid-svg-icons";
 import { PositionType } from "../../type/vectorType";
-import { useAppStore } from "../../data/store";
 import useMove from "../../hooks/useMove";
+import useWindowPriority from "../../hooks/useWindowPriority";
 
 type Props = {
   windowProps: Window;
@@ -31,7 +31,7 @@ const WindowHeader = ({
 }: Props) => {
   const windowHeaderRef = React.useRef<HTMLElement>(null);
 
-  const { windows, setWindow } = useAppStore();
+  const { removeWindow, snoozeWindow } = useWindowPriority();
   const { reset, handleClick, position } = useMove(
     initPosition,
     false,
@@ -83,7 +83,10 @@ const WindowHeader = ({
       <p className="window-header-name">File Explorer</p>
 
       <div className="window-header-buttons">
-        <button className="minimize-button"></button>
+        <button
+          className="minimize-button"
+          onClick={() => snoozeWindow(windowProps.id)}
+        ></button>
         <button
           className="fullscreen-button"
           onClick={() => setIsFullScreen(!isFullScreen)}
@@ -100,11 +103,7 @@ const WindowHeader = ({
         <button
           className="close-button"
           onClick={() => {
-            const remove_window = windows.filter(
-              (windowFil) => windowFil.id !== windowProps.id,
-            );
-
-            setWindow(remove_window);
+            removeWindow(windowProps.id);
           }}
         ></button>
       </div>

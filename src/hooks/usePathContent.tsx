@@ -2,10 +2,11 @@ import { useCallback } from "react";
 import { pathElement } from "../data/pathElement";
 import { File, Folder } from "../type/filesGridType";
 
-const usePathContent = (path: string) => {
-  const getWindowContent = useCallback(() => {
+const usePathContent = () => {
+  const getWindowContent = useCallback((path: string) => {
     if (path === "/") return pathElement;
 
+    console.log(path);
     const pathSplit = path.split("/").slice(1, undefined);
 
     let brutForce = false;
@@ -34,7 +35,7 @@ const usePathContent = (path: string) => {
     }
 
     return findElement;
-  }, [path]);
+  }, []);
 
   return { getWindowContent };
 };

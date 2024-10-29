@@ -1,9 +1,9 @@
 import { Window } from "../type/windowType";
-import React, { useCallback } from "react";
-import usePathContent from "../hooks/usePathContent";
+import React from "react";
 import WindowHeader from "./Window/WindowHeader";
 import { PositionType, SizeType } from "../type/vectorType";
 import WindowContent from "./Window/WindowContent";
+import useWindowPriority from "../hooks/useWindowPriority";
 
 type Props = {
   windowProps: Window;
@@ -22,17 +22,9 @@ const WindowElement = ({ windowProps }: Props) => {
     h: (window.innerHeight / 100) * 70,
   });
 
-  const [path, setPath] = React.useState(windowProps.path);
-
   const windowRef = React.useRef<HTMLElement>(null);
 
-  const { getWindowContent } = usePathContent(path);
-
-  const getContent = useCallback(() => {
-    const content = getWindowContent();
-
-    return content;
-  }, [path]);
+  const { setWindowPriority } = useWindowPriority();
 
   // const handleResizeMouseDown = (
   //   e: React.MouseEvent<HTMLDivElement | MouseEvent>,
@@ -68,6 +60,8 @@ const WindowElement = ({ windowProps }: Props) => {
   return (
     <section
       ref={windowRef}
+      id={`${windowProps.id}`}
+      onClick={() => setWindowPriority(windowProps.id)}
       className={isFullScreen ? "window window-fullscreen" : "window"}
       style={{
         top: `${position.y}px`,
@@ -83,7 +77,7 @@ const WindowElement = ({ windowProps }: Props) => {
         windowRef={windowRef}
         windowProps={windowProps}
       />
-      <WindowContent content={getContent()} setPath={setPath} />
+      <WindowContent initPath={windowProps.path} />
 
       {/* <div */}
       {/*   className="right-resize" */}

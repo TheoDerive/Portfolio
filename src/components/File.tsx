@@ -1,10 +1,9 @@
 import React, { RefObject } from "react";
 import useFilesGrid from "../hooks/useFilesGrid";
 import { File, GridType } from "../type/filesGridType";
-import { useAppStore } from "../data/store";
-import { Window } from "../type/windowType";
 import useMove from "../hooks/useMove";
 import { PositionType } from "../type/vectorType";
+import useWindowPriority from "../hooks/useWindowPriority";
 
 const FileElement = ({
   file,
@@ -39,9 +38,8 @@ const FileElement = ({
     setNewIdGrid,
     setAsMove,
   );
-
   const { can_send_file_to } = useFilesGrid();
-  const { setWindow, windows } = useAppStore();
+  const { newWindow } = useWindowPriority();
 
   React.useEffect(() => {
     if (!childRef.current) return;
@@ -79,14 +77,7 @@ const FileElement = ({
     if (setPath) {
       setPath(file.path);
     } else {
-      const new_window: Window = {
-        id: file.id * 20,
-        name: file.name,
-        path: `${file.path}`,
-        type: file.type,
-      };
-
-      setWindow([...windows, new_window]);
+      newWindow(file);
     }
   };
 

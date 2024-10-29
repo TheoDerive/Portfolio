@@ -1,16 +1,21 @@
 import React, { useCallback } from "react";
-import { File, Folder } from "../../type/filesGridType";
 import { isFile, isFolder } from "../../utils/verifElementType";
 import FileElement from "../File";
 import FolderElement from "../Folder";
+import usePathContent from "../../hooks/usePathContent";
 
 type Props = {
-  content: (File | Folder)[];
-  setPath: (path: string) => void;
+  initPath: string;
 };
 
-const WindowContent = ({ content, setPath }: Props) => {
+const WindowContent = ({ initPath }: Props) => {
+  const [path, setPath] = React.useState(initPath);
+
+  const { getWindowContent } = usePathContent();
+
   const printContent = useCallback(() => {
+    const content = getWindowContent(path);
+
     if (content.length > 1) {
       return content.map((element) => <p>{element.name}</p>);
     } else if (content.length === 1 && isFolder(content[0])) {
@@ -24,7 +29,7 @@ const WindowContent = ({ content, setPath }: Props) => {
     } else if (content.length === 1 && isFile(content[0])) {
       return <p>{content[0].content}</p>;
     }
-  }, [content]);
+  }, []);
 
   return (
     <section className="window-content-container">
