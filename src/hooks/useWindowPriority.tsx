@@ -9,15 +9,21 @@ interface State {
 }
 
 export default function useWindowPriority() {
-  const [activeWindows, setActiveWindows] = React.useState<State>({
-    text: [],
-    folder: [],
-  });
+  const [activeWindows, setActiveWindows] = React.useState<State>(init());
 
   const { windows, setWindow } = useAppStore();
   const { getWindowContent } = usePathContent();
 
   React.useEffect(() => console.log(activeWindows), [activeWindows]);
+
+  function init() {
+    const windowInit: State = {
+      text: [],
+      folder: [],
+    };
+
+    return windowInit;
+  }
 
   const setWindowPriority = useCallback(
     (id: number) => {
@@ -99,6 +105,10 @@ export default function useWindowPriority() {
   );
 
   const getWindowsActive = useCallback(() => {
+    if (windows.length < 1) {
+      setActiveWindows(init());
+      return;
+    }
     for (let index = 0; index < windows.length; index++) {
       const window = windows[index];
 
