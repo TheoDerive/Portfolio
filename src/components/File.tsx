@@ -10,10 +10,14 @@ const FileElement = ({
   file,
   grid,
   parentRef,
+  setPath,
+  needMoving = true,
 }: {
   file: File;
-  grid: GridType;
-  parentRef: RefObject<HTMLDivElement>;
+  grid?: GridType;
+  parentRef?: RefObject<HTMLDivElement>;
+  setPath?: (path: string) => void;
+  needMoving?: boolean;
 }) => {
   const [newIdGrid, setNewIdGrid] = React.useState<number | null>(null);
   const [initialPosition, setInitialPosition] = React.useState<PositionType>({
@@ -22,16 +26,20 @@ const FileElement = ({
   });
   const [asMove, setAsMove] = React.useState<boolean>(false);
 
+  const falseParentfRef = React.useRef<HTMLElement>(null);
   const childRef = React.useRef<HTMLElement>(null);
+  const sendParentRef = parentRef ? parentRef : falseParentfRef;
 
   const { position, reset, handleClick } = useMove(
     initialPosition,
     true,
     childRef,
-    parentRef,
+    sendParentRef,
+    needMoving,
     setNewIdGrid,
     setAsMove,
   );
+
   const { can_send_file_to } = useFilesGrid();
   const { setWindow, windows } = useAppStore();
 
@@ -51,40 +59,45 @@ const FileElement = ({
   }, [asMove]);
 
   const onClick = (mouse: React.MouseEvent<HTMLElement | MouseEvent>) => {
-    if (!parentRef.current || !childRef.current) return;
+    if (!sendParentRef || !sendParentRef.current || !childRef.current) return;
 
     const grid_size = {
-      width: parentRef.current.clientWidth,
-      height: parentRef.current.clientHeight,
+      width: sendParentRef.current.clientWidth,
+      height: sendParentRef.current.clientHeight,
     };
 
     childRef.current.style.width = `${grid_size.width}px`;
     childRef.current.style.height = `${grid_size.height}px`;
 
-    parentRef.current.style.position = "unset";
+    sendParentRef.current.style.position = "unset";
     childRef.current.style.position = "absolute";
 
     handleClick(mouse);
   };
 
   const handleDoubleClick = () => {
-    const new_window: Window = {
-      id: file.id * 20,
-      name: file.name,
-      path: `${file.path}`,
-      type: file.type,
-    };
+    if (setPath) {
+      setPath(file.path);
+    } else {
+      const new_window: Window = {
+        id: file.id * 20,
+        name: file.name,
+        path: `${file.path}`,
+        type: file.type,
+      };
 
-    setWindow([...windows, new_window]);
+      setWindow([...windows, new_window]);
+    }
   };
 
   const onReset = () => {
-    if (!parentRef.current || !childRef.current) return;
+    if (!sendParentRef || !grid || !sendParentRef.current || !childRef.current)
+      return;
 
     childRef.current.style.width = `100%`;
     childRef.current.style.height = `100%`;
 
-    parentRef.current.style.position = "relative";
+    sendParentRef.current.style.position = "relative";
     childRef.current.style.position = "unset";
     childRef.current.style.pointerEvents = "auto";
     childRef.current.style.zIndex = "unset";

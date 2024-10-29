@@ -1,9 +1,9 @@
 import { Window } from "../type/windowType";
 import React, { useCallback } from "react";
 import usePathContent from "../hooks/usePathContent";
-import { isFolder } from "../utils/verifElementType";
 import WindowHeader from "./Window/WindowHeader";
 import { PositionType, SizeType } from "../type/vectorType";
+import WindowContent from "./Window/WindowContent";
 
 type Props = {
   windowProps: Window;
@@ -31,14 +31,7 @@ const WindowElement = ({ windowProps }: Props) => {
   const getContent = useCallback(() => {
     const content = getWindowContent();
 
-    if (content.length > 1) {
-      return content.map((element) => <p>{element.name}</p>);
-    }
-    if (isFolder(content[0])) {
-      return content[0].content.map((element) => <p>{element.name}</p>);
-    }
-
-    return content[0].content;
+    return content;
   }, [path]);
 
   // const handleResizeMouseDown = (
@@ -90,7 +83,7 @@ const WindowElement = ({ windowProps }: Props) => {
         windowRef={windowRef}
         windowProps={windowProps}
       />
-      {getContent()}
+      <WindowContent content={getContent()} setPath={setPath} />
 
       {/* <div */}
       {/*   className="right-resize" */}

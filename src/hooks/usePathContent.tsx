@@ -4,7 +4,6 @@ import { File, Folder } from "../type/filesGridType";
 
 const usePathContent = (path: string) => {
   const getWindowContent = useCallback(() => {
-    console.log("call");
     if (path === "/") return pathElement;
 
     const pathSplit = path.split("/").slice(1, undefined);
@@ -27,10 +26,8 @@ const usePathContent = (path: string) => {
           (find: File | Folder) => find.name === pathSplit[timer],
         );
         if (findElement.length === 0) {
-          console.log(" Element not found");
           brutForce = true;
         } else {
-          console.log("find");
           timer++;
         }
       }

@@ -6,9 +6,14 @@ const useMove = (
   isGridElement: boolean,
   parentRef: React.RefObject<HTMLElement>,
   childRef: React.RefObject<HTMLElement>,
+  needMoving: boolean = true,
   setNewIdGrid?: (id: number) => void,
   setAsMove?: (asMove: boolean) => void,
-) => {
+): {
+  reset: () => void;
+  position: PositionType;
+  handleClick: (mouse: React.MouseEvent<HTMLElement | MouseEvent>) => void;
+} => {
   const [isClick, setIsClick] = React.useState<boolean>(false);
   const [position, setPosition] = React.useState<PositionType>(initPosition);
   const [initialPosition, setInitialPosition] = React.useState<PositionType>({
@@ -79,7 +84,15 @@ const useMove = (
     return () => document.removeEventListener("mousemove", handleMouseMove);
   }, [initialPosition, childRef, parentRef, isClick]);
 
-  return { reset, handleClick, position };
+  if (!needMoving) {
+    return {
+      reset: () => null,
+      position: initPosition,
+      handleClick: () => null,
+    };
+  }
+
+  return { reset, position, handleClick };
 };
 
 export default useMove;
