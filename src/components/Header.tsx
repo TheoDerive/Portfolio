@@ -1,17 +1,68 @@
 import React from "react";
 import useDesktopUtilities from "../hooks/useDesktopUtilities";
 import useWindowPriority from "../hooks/useWindowPriority";
+import { WindowIdentification } from "../type/windowType";
 
 const Header = () => {
   const { date } = useDesktopUtilities();
-  const { getWindowsActive } = useWindowPriority();
+  const { activeWindows, unsnoozeWindow } = useWindowPriority();
 
-  React.useEffect(() => {
-    getWindowsActive();
-  }, [getWindowsActive]);
+  const getWindowsActiveImage = (type: string): string => {
+    switch (type) {
+      case "text":
+        return "/images/File-text-top.svg";
+
+      case "folder":
+        return "/images/Folder-top.svg";
+
+      default:
+        return "/images/File-empty-top.svg";
+    }
+  };
+
+  const displayActiveWindow = React.useCallback(
+    (key: string, content: WindowIdentification[]) => {
+      return (
+        <div className="windows-active-container">
+          {content.map((wind) => (
+            <div
+              className={`window-active ${wind.snooze ? "window-active-snooze" : ""}`}
+              onClick={() => (wind.snooze ? unsnoozeWindow(wind.id) : null)}
+            >
+              <img
+                className="window-active-image"
+                src={getWindowsActiveImage(key)}
+              />
+              <p>{wind.name}</p>
+            </div>
+          ))}
+        </div>
+      );
+    },
+    [activeWindows],
+  );
+
+  const displayActiveWindowType = React.useCallback(
+    (key: string, content: WindowIdentification[]) => {
+      return (
+        <div className={`header-window-active-type ${key}-active-window`}>
+          <span className="header-window-active-type-counter"></span>
+          {displayActiveWindow(key, content)}
+        </div>
+      );
+    },
+    [activeWindows],
+  );
 
   return (
     <header className="desktop-header">
+      <section className="windows-active-type">
+        {Object.keys(activeWindows).map((key) =>
+          activeWindows[key].length > 0
+            ? displayActiveWindowType(key, activeWindows[key])
+            : null,
+        )}
+      </section>
       <section className="left">
         <p className="time">
           {date.getHours()}:{date.getMinutes()}

@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { useAppStore } from "../data/store";
-import { File, FileType, Folder } from "../type/filesGridType";
+import { File, Folder } from "../type/filesGridType";
 import { Window, WindowIdentification } from "../type/windowType";
 import usePathContent from "./usePathContent";
 
@@ -14,7 +14,9 @@ export default function useWindowPriority() {
   const { windows, setWindow } = useAppStore();
   const { getWindowContent } = usePathContent();
 
-  React.useEffect(() => console.log(activeWindows), [activeWindows]);
+  React.useEffect(() => {
+    addWindowsActive();
+  }, [windows]);
 
   function init() {
     const windowInit: State = {
@@ -33,7 +35,7 @@ export default function useWindowPriority() {
 
         if (windowDOM) {
           if (window.id === id) {
-            windowDOM.style.zIndex = String(999);
+            windowDOM.style.zIndex = String(200);
           } else {
             windowDOM.style.zIndex = String(100);
           }
@@ -42,6 +44,27 @@ export default function useWindowPriority() {
     },
     [windows],
   );
+
+  const addWindowsActive = useCallback(() => {
+    const prevWindowsActive = init();
+    for (let index = 0; index < windows.length; index++) {
+      const window = windows[index];
+
+      const content = getWindowContent(window.path);
+      const contentType = content[0].type;
+
+      const newActiveWindow: WindowIdentification = {
+        id: window.id,
+        name: window.name,
+        snooze: window.snooze,
+        type: contentType,
+      };
+
+      prevWindowsActive[contentType].push(newActiveWindow);
+    }
+
+    setActiveWindows(prevWindowsActive);
+  }, [windows]);
 
   const newWindow = useCallback(
     (element: File | Folder) => {
@@ -100,33 +123,10 @@ export default function useWindowPriority() {
       );
 
       setWindow(unsnooze);
+      setWindowPriority(id);
     },
     [windows],
   );
-
-  const getWindowsActive = useCallback(() => {
-    if (windows.length < 1) {
-      setActiveWindows(init());
-      return;
-    }
-    for (let index = 0; index < windows.length; index++) {
-      const window = windows[index];
-
-      const content = getWindowContent(window.path);
-      const contentType = content[0].type;
-
-      setActiveWindows({
-        ...activeWindows,
-        [contentType]: [
-          {
-            name: window.name,
-            id: window.id,
-            snooze: window.snooze,
-          },
-        ],
-      });
-    }
-  }, [windows]);
 
   return {
     setWindowPriority,
@@ -134,6 +134,6 @@ export default function useWindowPriority() {
     removeWindow,
     snoozeWindow,
     unsnoozeWindow,
-    getWindowsActive,
+    activeWindows,
   };
 }

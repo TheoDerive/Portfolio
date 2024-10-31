@@ -1,7 +1,7 @@
 import { Window } from "../type/windowType";
 import React from "react";
 import WindowHeader from "./Window/WindowHeader";
-import { PositionType, SizeType } from "../type/vectorType";
+import { PositionType } from "../type/vectorType";
 import WindowContent from "./Window/WindowContent";
 import useWindowPriority from "../hooks/useWindowPriority";
 
@@ -17,10 +17,12 @@ const initPosition: PositionType = {
 const WindowElement = ({ windowProps }: Props) => {
   const [isFullScreen, setIsFullScreen] = React.useState<boolean>(false);
   const [position, setPosition] = React.useState<PositionType>(initPosition);
-  const [prevSize, setPrevSize] = React.useState<SizeType>({
+  // const [prevSize, setPrevSize] = React.useState<SizeType>({
+  // });
+  const prevSize = {
     w: (window.innerWidth / 100) * 70,
     h: (window.innerHeight / 100) * 70,
-  });
+  };
 
   const windowRef = React.useRef<HTMLElement>(null);
 

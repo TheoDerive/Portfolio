@@ -12,6 +12,16 @@ export const pathElement: (File | Folder)[] = [
     },
   },
   {
+    id: 3003,
+    name: "Test",
+    type: "text",
+    content: "coucou",
+    path: "/File",
+    onDesktop: {
+      id: 110,
+    },
+  },
+  {
     id: 3001,
     name: "Folder",
     type: "folder",

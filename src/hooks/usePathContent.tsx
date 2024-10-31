@@ -6,7 +6,6 @@ const usePathContent = () => {
   const getWindowContent = useCallback((path: string) => {
     if (path === "/") return pathElement;
 
-    console.log(path);
     const pathSplit = path.split("/").slice(1, undefined);
 
     let brutForce = false;

@@ -12,4 +12,5 @@ export type WindowIdentification = {
   id: number;
   name: string;
   snooze: boolean;
+  type: FileType;
 };
