@@ -5,11 +5,15 @@ import { useAppStore } from "./data/store";
 import FileElement from "./components/File";
 import FolderElement from "./components/Folder";
 import WindowElement from "./components/Window";
+import { isFile } from "./utils/verifElementType";
+import Header from "./components/Header";
 
-export default function Desktop() {
+const Desktop = () => {
   const gridParentRef = React.useRef<HTMLDivElement>(null);
 
-  const { filesGrid, setFilesGrid, windows } = useAppStore();
+  const filesGrid = useAppStore((state) => state.filesGrid);
+  const setFilesGrid = useAppStore((state) => state.setFilesGrid);
+  const windows = useAppStore((state) => state.windows);
   const { init } = useFilesGrid();
 
   React.useEffect(() => {
@@ -18,6 +22,7 @@ export default function Desktop() {
 
   return (
     <section className="desktop">
+      <Header />
       <Wallpaper />
 
       {filesGrid.map((column, index) => (
@@ -31,7 +36,7 @@ export default function Desktop() {
             >
               {grid.content ? (
                 <>
-                  {grid.content.type === "file" ? (
+                  {isFile(grid.content) ? (
                     <FileElement
                       key={grid.content.id}
                       grid={grid}
@@ -53,9 +58,13 @@ export default function Desktop() {
         </section>
       ))}
 
-      {windows.map((window) => (
-        <WindowElement key={window.id} windowProps={window} />
-      ))}
+      {windows.map((window) =>
+        window.snooze ? null : (
+          <WindowElement key={window.id} windowProps={window} />
+        ),
+      )}
     </section>
   );
-}
+};
+
+export default React.memo(Desktop);

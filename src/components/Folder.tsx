@@ -1,64 +1,102 @@
 import React, { RefObject } from "react";
-import { Folder, GridType } from "../type/filesGridType";
 import useFilesGrid from "../hooks/useFilesGrid";
+import { Folder, GridType } from "../type/filesGridType";
+import useMove from "../hooks/useMove";
+import { PositionType } from "../type/vectorType";
 import DominantFileInFolder from "./DominantFileInFolder";
-import { Window } from "../type/windowType";
-import { useAppStore } from "../data/store";
+import useWindowPriority from "../hooks/useWindowPriority";
 
-export default function FolderElement({
+const FolderElement = ({
   folder,
-  parentRef,
   grid,
+  parentRef,
+  setPath,
+  needMoving = true,
 }: {
   folder: Folder;
-  parentRef: RefObject<HTMLDivElement>;
-  grid: GridType;
-}) {
-  const [asMove, setAsMove] = React.useState(false);
-  const [isClick, setIsClick] = React.useState(false);
+  grid?: GridType;
+  parentRef?: RefObject<HTMLDivElement>;
+  setPath?: (path: string) => void;
+  needMoving?: boolean;
+}) => {
   const [newIdGrid, setNewIdGrid] = React.useState<number | null>(null);
+  const [initialPosition, setInitialPosition] = React.useState<PositionType>({
+    x: 0,
+    y: 0,
+  });
+  const [asMove, setAsMove] = React.useState<boolean>(false);
+
+  const falseParentfRef = React.useRef<HTMLElement>(null);
   const childRef = React.useRef<HTMLElement>(null);
+  const sendParentRef = parentRef ? parentRef : falseParentfRef;
 
+  const { position, reset, handleClick } = useMove(
+    initialPosition,
+    true,
+    childRef,
+    sendParentRef,
+    needMoving,
+    setNewIdGrid,
+    setAsMove,
+  );
   const { can_send_file_to } = useFilesGrid();
-  const { setWindow, windows } = useAppStore()
+  const { newWindow } = useWindowPriority();
 
-  const handleClick = () => {
-    if (!parentRef.current || !childRef.current) return;
+  React.useEffect(() => {
+    if (!childRef.current) return;
+    const elementPosition = childRef.current.getBoundingClientRect();
+    setInitialPosition({
+      x: elementPosition.x,
+      y: elementPosition.y,
+    });
+  }, [childRef]);
+
+  React.useEffect(() => {
+    if (asMove && childRef.current) {
+      childRef.current.style.pointerEvents = "none";
+    }
+  }, [asMove]);
+
+  const onClick = (mouse: React.MouseEvent<HTMLElement | MouseEvent>) => {
+    if (!sendParentRef || !grid || !sendParentRef.current || !childRef.current)
+      return;
 
     const grid_size = {
-      width: parentRef.current.clientWidth,
-      height: parentRef.current.clientHeight,
+      width: sendParentRef.current.clientWidth,
+      height: sendParentRef.current.clientHeight,
     };
 
     childRef.current.style.width = `${grid_size.width}px`;
     childRef.current.style.height = `${grid_size.height}px`;
 
-    setIsClick(true);
+    sendParentRef.current.style.position = "unset";
+    childRef.current.style.position = "absolute";
+    childRef.current.style.zIndex = "999";
+
+    handleClick(mouse);
   };
 
-    const handleDoubleClick = () => {
-      const new_window: Window = {
-        id: 200,
-        name: folder.name,
-        path: folder.path
-      }
-  
-      setWindow([...windows, new_window])
-  }
+  const handleDoubleClick = () => {
+    if (setPath) {
+      setPath(folder.path);
+    } else {
+      newWindow(folder);
+    }
+  };
 
-  const reset = () => {
-    if (!parentRef.current || !childRef.current) return;
+  const onReset = () => {
+    if (!sendParentRef || !grid || !sendParentRef.current || !childRef.current)
+      return;
 
     childRef.current.style.width = `100%`;
     childRef.current.style.height = `100%`;
 
-    parentRef.current.style.position = "relative";
+    sendParentRef.current.style.position = "relative";
     childRef.current.style.position = "unset";
-    childRef.current.style.transform = "translate(0%, 0%)";
     childRef.current.style.pointerEvents = "auto";
     childRef.current.style.zIndex = "unset";
 
-    setIsClick(false);
+    reset();
 
     if (newIdGrid) {
       can_send_file_to(grid, newIdGrid);
@@ -66,57 +104,28 @@ export default function FolderElement({
   };
 
   React.useEffect(() => {
-    const handleMove = (mouse: MouseEvent) => {
-      if (!isClick || !childRef.current || !mouse.target) return;
-
-      childRef.current.style.top = `${mouse.clientY}px`;
-      childRef.current.style.left = `${mouse.clientX}px`;
-
-      const mouseTarget = mouse.target as HTMLElement;
-
-      if (mouseTarget.className === "grid") {
-        setNewIdGrid(Number(mouseTarget.id));
-      }
-
-      if (
-        (mouseTarget.className === "file" && mouseTarget.parentElement) ||
-        (mouseTarget.className === "folder" && mouseTarget.parentElement)
-      ) {
-        setNewIdGrid(Number(mouseTarget.parentElement.id));
-      }
-
-      setAsMove(true);
-    };
     const handleMouseUp = () => {
-      if (isClick) reset();
+      onReset();
     };
 
-    document.addEventListener("mousemove", handleMove);
     document.addEventListener("mouseup", handleMouseUp);
 
     return () => {
-      document.removeEventListener("mousemove", handleMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isClick, newIdGrid, childRef]);
-
-  React.useEffect(() => {
-    if (asMove && isClick && childRef.current && parentRef.current) {
-      parentRef.current.style.position = "unset";
-      childRef.current.style.position = "absolute";
-      childRef.current.style.transform = "translate(-50%, -50%)";
-      childRef.current.style.pointerEvents = "none";
-      childRef.current.style.zIndex = "999";
-    }
-  }, [asMove, isClick, childRef, parentRef]);
+  }, [newIdGrid, childRef]);
 
   return (
     <article
-      onMouseDown={() => handleClick()}
+      onMouseDown={(mouse) => onClick(mouse)}
+      onDoubleClick={() => handleDoubleClick()}
       ref={childRef}
       className="folder"
       id={`${folder.id}`}
-      onDoubleClick={() => handleDoubleClick()}
+      style={{
+        top: `${position.y}px`,
+        left: `${position.x}px`,
+      }}
     >
       <div className="folder-image-container">
         <img className="folder-image" src="/images/Folder-top.svg" />
@@ -125,4 +134,6 @@ export default function FolderElement({
       {folder.name}
     </article>
   );
-}
+};
+
+export default React.memo(FolderElement);

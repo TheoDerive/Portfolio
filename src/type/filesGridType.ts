@@ -1,12 +1,11 @@
-export type FileType = "text" | "image" | "code" | "default";
+export type FileType = "text" | "image" | "code" | "default" | "folder";
 
 export type File = {
   id: number;
   name: string;
-  content?: string;
-  type: "file";
-  fileType: FileType;
-  path: string,
+  content: string;
+  type: FileType;
+  path: string;
   onDesktop?: {
     id: number;
   };
@@ -15,9 +14,9 @@ export type File = {
 export type Folder = {
   id: number;
   name: string;
-  path: string,
+  path: string;
   content: (File | Folder)[];
-  type: "folder";
+  type: FileType;
   onDesktop?: {
     id: number;
   };

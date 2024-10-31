@@ -5,6 +5,6 @@ export const useAppStore = create<StoreInterface>((set) => ({
   filesGrid: [],
   setFilesGrid: (filesGrid) => set({ filesGrid }),
 
-    windows: [],
-    setWindow: (windows) => set({ windows })
+  windows: [],
+  setWindow: (windows) => set({ windows }),
 }));
