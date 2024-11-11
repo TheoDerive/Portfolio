@@ -13,12 +13,14 @@ const DominantFileInFolder = memo(({ folder }: { folder: Folder }) => {
       code: number;
       default: number;
       folder: number;
+      console: number;
     } = {
       text: 0,
       image: 0,
       code: 0,
       default: 0,
       folder: 0,
+      console: 0,
     };
 
     for (let index = 0; index < folder.content.length; index++) {

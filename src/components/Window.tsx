@@ -2,8 +2,10 @@ import { Window } from "../type/windowType";
 import React from "react";
 import WindowHeader from "./Window/WindowHeader";
 import { PositionType } from "../type/vectorType";
-import WindowContent from "./Window/WindowContent";
 import useWindowPriority from "../hooks/useWindowPriority";
+import Console from "./Applications/Console";
+import TextReader from "./Applications/TextReading";
+import FileExplorer from "./Applications/FileExplorer";
 
 type Props = {
   windowProps: Window;
@@ -14,7 +16,7 @@ const initPosition: PositionType = {
   y: window.innerHeight / 2,
 };
 
-const WindowElement = ({ windowProps }: Props) => {
+const WindowContainer = ({ windowProps }: Props) => {
   const [isFullScreen, setIsFullScreen] = React.useState<boolean>(false);
   const [position, setPosition] = React.useState<PositionType>(initPosition);
   // const [prevSize, setPrevSize] = React.useState<SizeType>({
@@ -27,6 +29,66 @@ const WindowElement = ({ windowProps }: Props) => {
   const windowRef = React.useRef<HTMLElement>(null);
 
   const { setWindowPriority } = useWindowPriority();
+
+  const initWindow = () => {
+    const getWindowContent = () => {
+      switch (windowProps.type) {
+        case "folder":
+          return <FileExplorer windowProps={windowProps} />;
+
+        case "text":
+          return <TextReader windowProps={windowProps} />;
+
+        case "console":
+          return <Console />;
+
+        default:
+          break;
+      }
+    };
+
+    return (
+      <section
+        ref={windowRef}
+        id={`${windowProps.id}`}
+        onClick={() => setWindowPriority(windowProps.id)}
+        className={isFullScreen ? "window window-fullscreen" : "window"}
+        style={{
+          top: `${position.y}px`,
+          left: `${position.x}px`,
+          width: `${prevSize.w}px`,
+          height: `${prevSize.h}px`,
+        }}
+      >
+        <WindowHeader
+          isFullScreen={isFullScreen}
+          setIsFullScreen={setIsFullScreen}
+          setPosition={setPosition}
+          windowRef={windowRef}
+          windowProps={windowProps}
+        />
+
+        {getWindowContent()}
+
+        {/* <div */}
+        {/*   className="right-resize" */}
+        {/*   onMouseDown={(e) => handleResizeMouseDown(e, "right")} */}
+        {/* /> */}
+        {/* <div */}
+        {/*   className="left-resize" */}
+        {/*   onMouseDown={(e) => handleResizeMouseDown(e, "left")} */}
+        {/* /> */}
+        {/* <div */}
+        {/*   className="top-resize" */}
+        {/*   onMouseDown={(e) => handleResizeMouseDown(e, "top")} */}
+        {/* /> */}
+        {/* <div */}
+        {/*   className="bottom-resize" */}
+        {/*   onMouseDown={(e) => handleResizeMouseDown(e, "bottom")} */}
+        {/* /> */}
+      </section>
+    );
+  };
 
   // const handleResizeMouseDown = (
   //   e: React.MouseEvent<HTMLDivElement | MouseEvent>,
@@ -59,46 +121,7 @@ const WindowElement = ({ windowProps }: Props) => {
   //   document.addEventListener("mouseup", handleResizeMouseUp);
   // };
 
-  return (
-    <section
-      ref={windowRef}
-      id={`${windowProps.id}`}
-      onClick={() => setWindowPriority(windowProps.id)}
-      className={isFullScreen ? "window window-fullscreen" : "window"}
-      style={{
-        top: `${position.y}px`,
-        left: `${position.x}px`,
-        width: `${prevSize.w}px`,
-        height: `${prevSize.h}px`,
-      }}
-    >
-      <WindowHeader
-        isFullScreen={isFullScreen}
-        setIsFullScreen={setIsFullScreen}
-        setPosition={setPosition}
-        windowRef={windowRef}
-        windowProps={windowProps}
-      />
-      <WindowContent initPath={windowProps.path} />
-
-      {/* <div */}
-      {/*   className="right-resize" */}
-      {/*   onMouseDown={(e) => handleResizeMouseDown(e, "right")} */}
-      {/* /> */}
-      {/* <div */}
-      {/*   className="left-resize" */}
-      {/*   onMouseDown={(e) => handleResizeMouseDown(e, "left")} */}
-      {/* /> */}
-      {/* <div */}
-      {/*   className="top-resize" */}
-      {/*   onMouseDown={(e) => handleResizeMouseDown(e, "top")} */}
-      {/* /> */}
-      {/* <div */}
-      {/*   className="bottom-resize" */}
-      {/*   onMouseDown={(e) => handleResizeMouseDown(e, "bottom")} */}
-      {/* /> */}
-    </section>
-  );
+  return initWindow();
 };
 
-export default React.memo(WindowElement);
+export default React.memo(WindowContainer);

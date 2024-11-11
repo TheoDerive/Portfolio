@@ -1,4 +1,10 @@
-export type FileType = "text" | "image" | "code" | "default" | "folder";
+export type FileType =
+  | "text"
+  | "image"
+  | "code"
+  | "default"
+  | "folder"
+  | "console";
 
 export type File = {
   id: number;

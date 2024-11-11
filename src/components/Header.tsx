@@ -5,7 +5,8 @@ import { WindowIdentification } from "../type/windowType";
 
 const Header = () => {
   const { date } = useDesktopUtilities();
-  const { activeWindows, unsnoozeWindow } = useWindowPriority();
+  const { activeWindows, unsnoozeWindow, setWindowPriority } =
+    useWindowPriority();
 
   const getWindowsActiveImage = (type: string): string => {
     switch (type) {
@@ -27,7 +28,11 @@ const Header = () => {
           {content.map((wind) => (
             <div
               className={`window-active ${wind.snooze ? "window-active-snooze" : ""}`}
-              onClick={() => (wind.snooze ? unsnoozeWindow(wind.id) : null)}
+              onClick={() =>
+                wind.snooze
+                  ? unsnoozeWindow(wind.id)
+                  : setWindowPriority(wind.id)
+              }
             >
               <img
                 className="window-active-image"
@@ -45,7 +50,16 @@ const Header = () => {
   const displayActiveWindowType = React.useCallback(
     (key: string, content: WindowIdentification[]) => {
       return (
-        <div className={`header-window-active-type ${key}-active-window`}>
+        <div
+          className={`header-window-active-type ${key}-active-window`}
+          onClick={() => {
+            console.log(content);
+            if (content.length !== 1) return;
+
+            unsnoozeWindow(content[0].id);
+            setWindowPriority(content[0].id);
+          }}
+        >
           <span className="header-window-active-type-counter"></span>
           {displayActiveWindow(key, content)}
         </div>

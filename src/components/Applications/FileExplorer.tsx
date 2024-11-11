@@ -1,19 +1,20 @@
-import React, { useCallback } from "react";
+import React from "react";
+import { Window } from "../../type/windowType";
+import usePathContent from "../../hooks/usePathContent";
 import { isFile, isFolder } from "../../utils/verifElementType";
 import FileElement from "../File";
 import FolderElement from "../Folder";
-import usePathContent from "../../hooks/usePathContent";
 
 type Props = {
-  initPath: string;
+  windowProps: Window;
 };
 
-const WindowContent = ({ initPath }: Props) => {
-  const [path, setPath] = React.useState(initPath);
+const FileExplorer = ({ windowProps }: Props) => {
+  const [path, setPath] = React.useState(windowProps.path);
 
   const { getWindowContent } = usePathContent();
 
-  const printContent = useCallback(() => {
+  const printContent = React.useCallback(() => {
     const content = getWindowContent(path);
 
     if (content.length > 1) {
@@ -29,7 +30,7 @@ const WindowContent = ({ initPath }: Props) => {
     } else if (content.length === 1 && isFile(content[0])) {
       return <p>{content[0].content}</p>;
     }
-  }, []);
+  }, [path]);
 
   return (
     <section className="window-content-container">
@@ -38,4 +39,4 @@ const WindowContent = ({ initPath }: Props) => {
   );
 };
 
-export default React.memo(WindowContent);
+export default React.memo(FileExplorer);

@@ -80,7 +80,7 @@ const WindowHeader = ({
       ref={windowHeaderRef}
     >
       <div style={{ width: "110px" }}></div>
-      <p className="window-header-name">File Explorer</p>
+      <p className="window-header-name">{windowProps.name}</p>
 
       <div className="window-header-buttons">
         <button

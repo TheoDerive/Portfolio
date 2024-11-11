@@ -78,6 +78,7 @@ const FolderElement = ({
 
   const handleDoubleClick = () => {
     if (setPath) {
+      console.log("pass");
       setPath(folder.path);
     } else {
       newWindow(folder);

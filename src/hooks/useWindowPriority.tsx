@@ -22,6 +22,7 @@ export default function useWindowPriority() {
     const windowInit: State = {
       text: [],
       folder: [],
+      console: [],
     };
 
     return windowInit;
@@ -72,11 +73,27 @@ export default function useWindowPriority() {
         (wind) => wind.id === element.id * 20,
       );
 
-      if (windowAlreadyExist.length > 0) return;
+      if (windowAlreadyExist.length > 0) {
+        setWindowPriority(windowAlreadyExist[0].id);
+        return;
+      }
+
+      const headerTitle = () => {
+        switch (element.type) {
+          case "folder":
+            return "FileExplorer";
+
+          case "text":
+            return "FileReader";
+
+          default:
+            return element.name;
+        }
+      };
 
       const new_window: Window = {
         id: element.id * 20,
-        name: element.name,
+        name: headerTitle(),
         path: `${element.path}`,
         type: element.type,
         snooze: false,

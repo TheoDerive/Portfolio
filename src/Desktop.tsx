@@ -4,7 +4,7 @@ import useFilesGrid from "./hooks/useFilesGrid";
 import { useAppStore } from "./data/store";
 import FileElement from "./components/File";
 import FolderElement from "./components/Folder";
-import WindowElement from "./components/Window";
+import WindowContainer from "./components/Window";
 import { isFile } from "./utils/verifElementType";
 import Header from "./components/Header";
 
@@ -60,7 +60,7 @@ const Desktop = () => {
 
       {windows.map((window) =>
         window.snooze ? null : (
-          <WindowElement key={window.id} windowProps={window} />
+          <WindowContainer key={window.id} windowProps={window} />
         ),
       )}
     </section>
