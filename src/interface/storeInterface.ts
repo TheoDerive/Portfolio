@@ -7,4 +7,7 @@ export interface StoreInterface {
 
   windows: Window[];
   setWindow: (windows: Window[]) => void;
+
+  username: string;
+  setUsername: (username: string) => void;
 }

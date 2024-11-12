@@ -7,4 +7,7 @@ export const useAppStore = create<StoreInterface>((set) => ({
 
   windows: [],
   setWindow: (windows) => set({ windows }),
+
+  username: "thyo",
+  setUsername: (username) => set({ username }),
 }));

@@ -26,10 +26,14 @@ const useMove = (
   }, [initPosition]);
 
   const handleClick = useCallback(
-    (mouse: React.MouseEvent<HTMLElement | MouseEvent>) => {
+    (
+      mouse: React.MouseEvent<HTMLElement | MouseEvent>,
+      initPos: PositionType,
+    ) => {
       if (!parentRef.current || !childRef.current) return;
+      console.log(initPos);
       setIsClick(true);
-      setInitialPosition({ x: mouse.clientX, y: mouse.clientY });
+      setInitialPosition(initPos);
     },
     [initPosition],
   );

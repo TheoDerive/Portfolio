@@ -9,13 +9,11 @@ const FileElement = ({
   file,
   grid,
   parentRef,
-  setPath,
   needMoving = true,
 }: {
   file: File;
   grid?: GridType;
   parentRef?: RefObject<HTMLDivElement>;
-  setPath?: (path: string) => void;
   needMoving?: boolean;
 }) => {
   const [newIdGrid, setNewIdGrid] = React.useState<number | null>(null);
@@ -70,15 +68,16 @@ const FileElement = ({
     sendParentRef.current.style.position = "unset";
     childRef.current.style.position = "absolute";
 
-    handleClick(mouse);
+    const initPos: PositionType = {
+      x: childRef.current.getBoundingClientRect().x,
+      y: childRef.current.getBoundingClientRect().y,
+    };
+
+    handleClick(mouse, initPos);
   };
 
   const handleDoubleClick = () => {
-    if (setPath) {
-      setPath(file.path);
-    } else {
-      newWindow(file);
-    }
+    newWindow(file);
   };
 
   const onReset = () => {

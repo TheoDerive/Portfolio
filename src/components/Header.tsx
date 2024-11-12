@@ -53,7 +53,6 @@ const Header = () => {
         <div
           className={`header-window-active-type ${key}-active-window`}
           onClick={() => {
-            console.log(content);
             if (content.length !== 1) return;
 
             unsnoozeWindow(content[0].id);
@@ -82,7 +81,7 @@ const Header = () => {
           {date.getHours()}:{date.getMinutes()}
         </p>
         <p className="date">
-          {date.getFullYear()}/{date.getMonth()}/{date.getDay()}
+          {date.getFullYear()}/{date.getMonth() + 1}/{date.getDay()}
         </p>
       </section>
     </header>

@@ -22,7 +22,7 @@ const FileExplorer = ({ windowProps }: Props) => {
     } else if (content.length === 1 && isFolder(content[0])) {
       return content[0].content.map((element) =>
         isFile(element) ? (
-          <FileElement file={element} setPath={setPath} />
+          <FileElement file={element} />
         ) : (
           <FolderElement folder={element} setPath={setPath} />
         ),

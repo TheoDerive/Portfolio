@@ -1,4 +1,5 @@
 @import "./libs/font.scss";
+@import "./libs/animation.scss";
 
 $primaire: #01161e;
 $secondaire: #f3e8ee;
@@ -23,17 +24,18 @@ html {
   height: 100vh;
   overflow: hidden;
   position: relative;
-  padding-top: 40px;
 }
 
 canvas {
   pointer-events: none;
 }
 
+.info-font {
+  font-family: "Pixelify Sans", sans-serif;
+}
+
 // Desktop
 .desktop {
-  display: grid;
-  grid: auto / 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   position: relative;
 
   &::after {
@@ -47,17 +49,45 @@ canvas {
     z-index: -1;
   }
 
+  .info {
+    position: absolute;
+    opacity: 0.3;
+    bottom: 30px;
+    left: 50%;
+    font-size: 2.5rem;
+    transform: translateX(-50%);
+    padding: 5px 10px;
+    color: $secondaire;
+    border-radius: 10px;
+    animation: bounce 0.5s;
+    animation-delay: 20s;
+  }
+
+  .desktop-display {
+    width: 100vw;
+    height: calc(100vh - 60px);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: grid;
+    grid: auto / 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  }
+
   // Header
   .desktop-header {
     position: absolute;
     width: 100vw;
-    height: 40px;
+    height: 60px;
     background: $background;
     display: flex;
     align-items: center;
     justify-content: space-between;
     z-index: 996;
     color: $secondaire;
+
+    .left {
+      padding: 5px 20px;
+    }
 
     .windows-active-type {
       display: flex;
@@ -66,8 +96,8 @@ canvas {
 
       .header-window-active-type {
         position: relative;
-        width: 40px;
-        height: 40px;
+        width: 60px;
+        height: 60px;
         border: 1px solid $secondaire;
 
         &:hover {
@@ -127,7 +157,7 @@ canvas {
         background: url("../images/Folder-top.svg");
         background-position: center;
         background-repeat: no-repeat;
-        background-size: 20px;
+        background-size: 30px;
       }
 
       .text-active-window {
@@ -440,6 +470,10 @@ canvas {
     height: 100%;
     padding: 10px;
 
+    p {
+      width: max-content;
+    }
+
     .window-content {
       width: 100%;
       height: calc(100% - 40px);
@@ -551,18 +585,34 @@ canvas {
 
 // Console
 .console-window {
-  padding: 5px 10px;
-  color: $secondaire;
   display: flex;
-  align-items: center;
-  justify-self: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: flex-start;
+  color: $secondaire;
+  padding: 5px 10px;
   gap: 10px;
 
-  input {
-    background: transparent;
-    color: white;
-    border: 0;
-    outline: 0;
-    font-size: 1rem;
+  .return-value {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-start;
+    color: $secondaire;
+    gap: 5px;
+  }
+  .command-prompt {
+    display: flex;
+    align-items: center;
+    justify-self: flex-start;
+    gap: 10px;
+
+    input {
+      background: transparent;
+      color: white;
+      border: 0;
+      outline: 0;
+      font-size: 1rem;
+    }
   }
 }

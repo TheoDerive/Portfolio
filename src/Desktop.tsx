@@ -25,44 +25,48 @@ const Desktop = () => {
       <Header />
       <Wallpaper />
 
-      {filesGrid.map((column, index) => (
-        <section key={index + 1} id={`${index + 1}`} className="column">
-          {column.map((grid) => (
-            <div
-              key={grid.id}
-              id={`${grid.id}`}
-              ref={gridParentRef}
-              className="grid"
-            >
-              {grid.content ? (
-                <>
-                  {isFile(grid.content) ? (
-                    <FileElement
-                      key={grid.content.id}
-                      grid={grid}
-                      file={grid.content}
-                      parentRef={gridParentRef}
-                    />
-                  ) : (
-                    <FolderElement
-                      key={grid.content.id}
-                      grid={grid}
-                      folder={grid.content}
-                      parentRef={gridParentRef}
-                    />
-                  )}
-                </>
-              ) : null}
-            </div>
-          ))}
-        </section>
-      ))}
+      <section className="desktop-display">
+        {filesGrid.map((column, index) => (
+          <section key={index + 1} id={`${index + 1}`} className="column">
+            {column.map((grid) => (
+              <div
+                key={grid.id}
+                id={`${grid.id}`}
+                ref={gridParentRef}
+                className="grid"
+              >
+                {grid.content ? (
+                  <>
+                    {isFile(grid.content) ? (
+                      <FileElement
+                        key={grid.content.id}
+                        grid={grid}
+                        file={grid.content}
+                        parentRef={gridParentRef}
+                      />
+                    ) : (
+                      <FolderElement
+                        key={grid.content.id}
+                        grid={grid}
+                        folder={grid.content}
+                        parentRef={gridParentRef}
+                      />
+                    )}
+                  </>
+                ) : null}
+              </div>
+            ))}
+          </section>
+        ))}
 
-      {windows.map((window) =>
-        window.snooze ? null : (
-          <WindowContainer key={window.id} windowProps={window} />
-        ),
-      )}
+        {windows.map((window) =>
+          window.snooze ? null : (
+            <WindowContainer key={window.id} windowProps={window} />
+          ),
+        )}
+
+        <section className="info info-font">Ce site est un portfolio</section>
+      </section>
     </section>
   );
 };
