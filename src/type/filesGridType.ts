@@ -15,6 +15,7 @@ export type File = {
   onDesktop?: {
     id: number;
   };
+  help?: string;
 };
 
 export type Folder = {
@@ -26,6 +27,7 @@ export type Folder = {
   onDesktop?: {
     id: number;
   };
+  help?: string;
 };
 
 export type GridType = {

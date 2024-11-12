@@ -40,6 +40,10 @@ const FileElement = ({
   const { newWindow } = useWindowPriority();
 
   React.useEffect(() => {
+    console.log(position);
+  }, [position]);
+
+  React.useEffect(() => {
     if (!childRef.current) return;
     const elementPosition = childRef.current.getBoundingClientRect();
     setInitialPosition({
@@ -56,6 +60,7 @@ const FileElement = ({
 
   const onClick = (mouse: React.MouseEvent<HTMLElement | MouseEvent>) => {
     if (!sendParentRef || !sendParentRef.current || !childRef.current) return;
+    console.log("click file");
 
     const grid_size = {
       width: sendParentRef.current.clientWidth,
@@ -68,12 +73,7 @@ const FileElement = ({
     sendParentRef.current.style.position = "unset";
     childRef.current.style.position = "absolute";
 
-    const initPos: PositionType = {
-      x: childRef.current.getBoundingClientRect().x,
-      y: childRef.current.getBoundingClientRect().y,
-    };
-
-    handleClick(mouse, initPos);
+    handleClick(mouse);
   };
 
   const handleDoubleClick = () => {

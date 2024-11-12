@@ -30,7 +30,7 @@ const FolderElement = ({
   const childRef = React.useRef<HTMLElement>(null);
   const sendParentRef = parentRef ? parentRef : falseParentfRef;
 
-  const { position, reset, handleClick } = useMove(
+  const { position, reset, handleClick, isClick } = useMove(
     initialPosition,
     true,
     childRef,
@@ -123,10 +123,14 @@ const FolderElement = ({
       ref={childRef}
       className="folder"
       id={`${folder.id}`}
-      style={{
-        top: `${position.y}px`,
-        left: `${position.x}px`,
-      }}
+      style={
+        isClick
+          ? {
+              top: `${position.y}px`,
+              left: `${position.x}px`,
+            }
+          : {}
+      }
     >
       <div className="folder-image-container">
         <img className="folder-image" src="/images/Folder-top.svg" />

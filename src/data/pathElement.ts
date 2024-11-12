@@ -16,6 +16,7 @@ export const pathElement: (File | Folder)[] = [
     name: "Dossier 1",
     type: "folder",
     path: "/Dossier 1",
+    help: "Vous povez voir mes projets en cliquant ici",
     content: [
       {
         id: 3001,

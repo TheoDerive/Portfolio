@@ -13,6 +13,7 @@ const useMove = (
   reset: () => void;
   position: PositionType;
   handleClick: (mouse: React.MouseEvent<HTMLElement | MouseEvent>) => void;
+  isClick: boolean;
 } => {
   const [isClick, setIsClick] = React.useState<boolean>(false);
   const [position, setPosition] = React.useState<PositionType>(initPosition);
@@ -26,16 +27,12 @@ const useMove = (
   }, [initPosition]);
 
   const handleClick = useCallback(
-    (
-      mouse: React.MouseEvent<HTMLElement | MouseEvent>,
-      initPos: PositionType,
-    ) => {
+    (mouse: React.MouseEvent<HTMLElement | MouseEvent>) => {
       if (!parentRef.current || !childRef.current) return;
-      console.log(initPos);
+      setInitialPosition({ x: mouse.clientX, y: mouse.clientY });
       setIsClick(true);
-      setInitialPosition(initPos);
     },
-    [initPosition],
+    [parentRef, childRef],
   );
 
   const reset = useCallback(() => {
@@ -93,10 +90,11 @@ const useMove = (
       reset: () => null,
       position: initPosition,
       handleClick: () => null,
+      isClick,
     };
   }
 
-  return { reset, position, handleClick };
+  return { reset, position, handleClick, isClick };
 };
 
 export default useMove;
