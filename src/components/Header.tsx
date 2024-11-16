@@ -2,11 +2,13 @@ import React from "react";
 import useDesktopUtilities from "../hooks/useDesktopUtilities";
 import useWindowPriority from "../hooks/useWindowPriority";
 import { WindowIdentification } from "../type/windowType";
+import { useAppStore } from "../data/store";
 
 const Header = () => {
   const { date } = useDesktopUtilities();
   const { activeWindows, unsnoozeWindow, setWindowPriority } =
     useWindowPriority();
+  const { tuto } = useAppStore();
 
   const getWindowsActiveImage = (type: string): string => {
     switch (type) {
@@ -52,6 +54,8 @@ const Header = () => {
       return (
         <div
           className={`header-window-active-type ${key}-active-window`}
+          onMouseEnter={() => MouseEnterTutoHover()}
+          onMouseLeave={() => MouseLeaveTutoHover()}
           onClick={() => {
             if (content.length !== 1) return;
 
@@ -66,6 +70,32 @@ const Header = () => {
     },
     [activeWindows],
   );
+
+  function MouseEnterTutoHover() {
+    const tutoHeader = tuto.filter((t) => t.element === "header");
+
+    if (tutoHeader[0].active) {
+      const tutoOverlay = document.querySelector(".header-tuto") as HTMLElement;
+      const tutoText = document.querySelector(
+        ".help-message-header",
+      ) as HTMLElement;
+      tutoOverlay.style.opacity = 0;
+      tutoText.style.opacity = 0;
+    }
+  }
+
+  function MouseLeaveTutoHover() {
+    const tutoHeader = tuto.filter((t) => t.element === "header");
+
+    if (tutoHeader[0].active) {
+      const tutoOverlay = document.querySelector(".header-tuto") as HTMLElement;
+      const tutoText = document.querySelector(
+        ".help-message-header",
+      ) as HTMLElement;
+      tutoOverlay.style.opacity = 1;
+      tutoText.style.opacity = 0.3;
+    }
+  }
 
   return (
     <header className="desktop-header">

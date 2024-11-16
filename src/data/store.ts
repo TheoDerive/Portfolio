@@ -10,4 +10,23 @@ export const useAppStore = create<StoreInterface>((set) => ({
 
   username: "thyo",
   setUsername: (username) => set({ username }),
+
+  tuto: [
+    {
+      element: "file",
+      active: true,
+    },
+    {
+      element: "folder",
+      active: true,
+    },
+    {
+      element: "header",
+      active: true,
+    },
+  ],
+  setTuto: (tuto) => set({ tuto }),
+
+  tutoInactive: false,
+  setTutoInactive: (tutoInactive) => set({ tutoInactive }),
 }));

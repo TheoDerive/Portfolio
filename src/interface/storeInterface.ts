@@ -1,4 +1,5 @@
 import { FilesGrid } from "../type/filesGridType";
+import { TutoPass } from "../type/tutoTypes";
 import { Window } from "../type/windowType";
 
 export interface StoreInterface {
@@ -10,4 +11,10 @@ export interface StoreInterface {
 
   username: string;
   setUsername: (username: string) => void;
+
+  tuto: TutoPass[];
+  setTuto: (tuto: TutoPass[]) => void;
+
+  tutoInactive: boolean;
+  setTutoInactive: (tutoInactive: boolean) => void;
 }

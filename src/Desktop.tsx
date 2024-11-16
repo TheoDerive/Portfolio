@@ -7,8 +7,10 @@ import FolderElement from "./components/Folder";
 import WindowContainer from "./components/Window";
 import { isFile } from "./utils/verifElementType";
 import Header from "./components/Header";
+import TutoComponent from "./components/Tuto";
 
 const Desktop = () => {
+  const [tutoPass, setTutoPass] = React.useState<boolean>(false);
   const gridParentRef = React.useRef<HTMLDivElement>(null);
 
   const filesGrid = useAppStore((state) => state.filesGrid);
@@ -67,6 +69,8 @@ const Desktop = () => {
 
         <section className="info info-font">Ce site est un portfolio</section>
       </section>
+
+      {tutoPass ? null : <TutoComponent setTutoPass={setTutoPass} />}
     </section>
   );
 };

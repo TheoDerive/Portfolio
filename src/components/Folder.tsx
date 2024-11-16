@@ -5,6 +5,7 @@ import useMove from "../hooks/useMove";
 import { PositionType } from "../type/vectorType";
 import DominantFileInFolder from "./DominantFileInFolder";
 import useWindowPriority from "../hooks/useWindowPriority";
+import { useAppStore } from "../data/store";
 
 const FolderElement = ({
   folder,
@@ -30,6 +31,7 @@ const FolderElement = ({
   const childRef = React.useRef<HTMLElement>(null);
   const sendParentRef = parentRef ? parentRef : falseParentfRef;
 
+  const { tuto, setTuto } = useAppStore();
   const { position, reset, handleClick, isClick } = useMove(
     initialPosition,
     true,
@@ -71,17 +73,30 @@ const FolderElement = ({
 
     sendParentRef.current.style.position = "unset";
     childRef.current.style.position = "absolute";
-    childRef.current.style.zIndex = "999";
+    childRef.current.style.zIndex = "900";
 
     handleClick(mouse);
   };
 
   const handleDoubleClick = () => {
     if (setPath) {
-      console.log("pass");
       setPath(folder.path);
     } else {
       newWindow(folder);
+
+      for (let i = 0; i < tuto.length; i++) {
+        const element = tuto[i];
+
+        if (element.element === "folder" && element.active) {
+          const newTuto = tuto.map((t) =>
+            t.element === element.element
+              ? { element: t.element, active: false }
+              : t,
+          );
+          setTuto(newTuto);
+          return;
+        }
+      }
     }
   };
 

@@ -5,6 +5,9 @@ $primaire: #01161e;
 $secondaire: #f3e8ee;
 $background: $primaire;
 
+$gridWidth: calc(100vw / 14);
+$gridHeight: calc(100vh / 9);
+
 * {
   padding: 0;
   margin: 0;
@@ -375,8 +378,12 @@ canvas {
     position: absolute;
     top: 50%;
     right: -100%;
-    transform: translate(40vw, -50%);
+    transform: translate(50%, -50%);
     width: max-content;
+    opacity: 0.3;
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 }
 
@@ -625,4 +632,96 @@ canvas {
       font-size: 1rem;
     }
   }
+}
+
+// Tuto
+.tuto-overlay {
+  transition: opacity 0.3s;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba($color: black, $alpha: 0.6);
+  z-index: 998;
+}
+
+.file-tuto {
+  opacity: 1;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    0 100%,
+    0% 18.5%,
+    0% 31%,
+    8.4% 31%,
+    8.4% 18.5%,
+    0% 18.5%
+  );
+}
+
+.folder-tuto {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    0 100%,
+    0% 6%,
+    0% 18.5%,
+    8.4% 18.5%,
+    8.4% 6%,
+    0% 6%
+  );
+}
+
+.header-tuto {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    0 100%,
+    0% 0%,
+    0% 6%,
+    4.5% 6%,
+    4.5% 0
+  );
+}
+
+.active-tuto-square {
+  width: 8.4%;
+  height: 12.5%;
+  border: 2px solid white;
+  z-index: 999;
+  position: absolute;
+  top: 6%;
+  left: 0;
+  pointer-events: none;
+}
+
+.file-square {
+  top: 18.5%;
+}
+
+.help-message-file,
+.help-message-folder,
+.help-message-header {
+  transition: opacity 0.3s;
+  z-index: 999;
+  color: white;
+  position: absolute;
+  font-size: 1.3rem;
+  width: 60%;
+  opacity: 0.6;
+}
+
+.help-message-folder {
+  animation: appear 0.2s forwards;
+  top: 10.2%;
+  left: 10%;
+}
+
+.help-message-header {
+  top: 0.5%;
+  left: 5%;
 }

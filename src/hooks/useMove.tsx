@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
 import { PositionType } from "../type/vectorType";
+import { useAppStore } from "../data/store";
 
 const useMove = (
   initPosition: PositionType,
@@ -21,6 +22,8 @@ const useMove = (
     x: 0,
     y: 0,
   });
+
+  const { setTutoInactive } = useAppStore();
 
   React.useEffect(() => {
     setPosition(initPosition);
@@ -49,6 +52,8 @@ const useMove = (
   React.useEffect(() => {
     const handleMouseMove = (mouse: MouseEvent) => {
       if (!parentRef.current || !childRef.current || !isClick) return;
+
+      setTutoInactive(true);
 
       if (setAsMove) {
         setAsMove(true);

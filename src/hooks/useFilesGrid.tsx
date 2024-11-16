@@ -235,6 +235,7 @@ export default function useFilesGrid() {
 
               if (grid_saved.current_content) {
                 grid_saved.current_content.id += 10;
+                console.log(grid_saved);
               }
 
               return {

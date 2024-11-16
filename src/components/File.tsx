@@ -4,6 +4,7 @@ import { File, GridType } from "../type/filesGridType";
 import useMove from "../hooks/useMove";
 import { PositionType } from "../type/vectorType";
 import useWindowPriority from "../hooks/useWindowPriority";
+import { useAppStore } from "../data/store";
 
 const FileElement = ({
   file,
@@ -38,10 +39,7 @@ const FileElement = ({
   );
   const { can_send_file_to } = useFilesGrid();
   const { newWindow } = useWindowPriority();
-
-  React.useEffect(() => {
-    console.log(position);
-  }, [position]);
+  const { setTutoInactive, setTuto, tuto } = useAppStore();
 
   React.useEffect(() => {
     if (!childRef.current) return;
@@ -60,7 +58,6 @@ const FileElement = ({
 
   const onClick = (mouse: React.MouseEvent<HTMLElement | MouseEvent>) => {
     if (!sendParentRef || !sendParentRef.current || !childRef.current) return;
-    console.log("click file");
 
     const grid_size = {
       width: sendParentRef.current.clientWidth,
@@ -96,6 +93,19 @@ const FileElement = ({
 
     if (newIdGrid) {
       can_send_file_to(grid, newIdGrid);
+
+      const newTuto = tuto.map((t) =>
+        t.element === "file" && t.active
+          ? {
+              element: t.element,
+              active: t.active,
+              elementActive: newIdGrid * 10,
+            }
+          : t,
+      );
+      setTuto(newTuto);
+
+      setTutoInactive(false);
     }
   };
 
@@ -115,9 +125,11 @@ const FileElement = ({
     <article
       onMouseDown={(mouse) => onClick(mouse)}
       onDoubleClick={() => handleDoubleClick()}
+      onMouseEnter={() => setTutoInactive(true)}
+      onMouseOut={() => (asMove ? null : setTutoInactive(false))}
       ref={childRef}
       className="file"
-      id={`${file.id}`}
+      id={`${grid ? grid.id * 10 : ""}`}
       style={{
         top: `${position.y}px`,
         left: `${position.x}px`,
