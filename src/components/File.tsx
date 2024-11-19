@@ -5,6 +5,7 @@ import useMove from "../hooks/useMove";
 import { PositionType } from "../type/vectorType";
 import useWindowPriority from "../hooks/useWindowPriority";
 import { useAppStore } from "../data/store";
+import { TutoPass } from "../type/tutoTypes";
 
 const FileElement = ({
   file,
@@ -23,6 +24,7 @@ const FileElement = ({
     y: 0,
   });
   const [asMove, setAsMove] = React.useState<boolean>(false);
+  const [isTutoActive, setIsTutoActive] = React.useState(true);
 
   const falseParentfRef = React.useRef<HTMLElement>(null);
   const childRef = React.useRef<HTMLElement>(null);
@@ -40,6 +42,12 @@ const FileElement = ({
   const { can_send_file_to } = useFilesGrid();
   const { newWindow } = useWindowPriority();
   const { setTutoInactive, setTuto, tuto } = useAppStore();
+
+  React.useEffect(() => {
+    const tutoIndex = tuto.find((t) => t.element === "file");
+    if (!tutoIndex) return;
+    setIsTutoActive(tutoIndex.active);
+  }, [tuto]);
 
   React.useEffect(() => {
     if (!childRef.current) return;
@@ -94,6 +102,8 @@ const FileElement = ({
     if (newIdGrid) {
       can_send_file_to(grid, newIdGrid);
 
+      if (!isTutoActive) return;
+
       const newTuto = tuto.map((t) =>
         t.element === "file" && t.active
           ? {
@@ -124,12 +134,14 @@ const FileElement = ({
   return (
     <article
       onMouseDown={(mouse) => onClick(mouse)}
-      onDoubleClick={() => handleDoubleClick()}
-      onMouseEnter={() => setTutoInactive(true)}
-      onMouseOut={() => (asMove ? null : setTutoInactive(false))}
+      onDoubleClick={() => (isTutoActive ? null : handleDoubleClick())}
+      onMouseEnter={() => (isTutoActive ? setTutoInactive(true) : null)}
+      onMouseOut={() =>
+        isTutoActive ? (asMove ? null : setTutoInactive(false)) : null
+      }
       ref={childRef}
       className="file"
-      id={`${grid ? grid.id * 10 : ""}`}
+      id={`${grid ? `file-${grid.id * 10}` : ""}`}
       style={{
         top: `${position.y}px`,
         left: `${position.x}px`,

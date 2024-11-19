@@ -646,21 +646,6 @@ canvas {
   z-index: 998;
 }
 
-.file-tuto {
-  opacity: 1;
-  clip-path: polygon(
-    0 0,
-    100% 0,
-    100% 100%,
-    0 100%,
-    0% 18.5%,
-    0% 31%,
-    8.4% 31%,
-    8.4% 18.5%,
-    0% 18.5%
-  );
-}
-
 .folder-tuto {
   clip-path: polygon(
     0 0,
@@ -724,4 +709,50 @@ canvas {
 .help-message-header {
   top: 0.5%;
   left: 5%;
+}
+
+.next-tuto {
+  position: absolute;
+  z-index: 999;
+  top: 20px;
+  right: 150px;
+  padding: 5px;
+  background: black;
+  color: white;
+  border: 1px solid white;
+  cursor: pointer;
+
+  &:hover {
+    background: white;
+    color: black;
+  }
+}
+
+.pass-tuto {
+  position: absolute;
+  z-index: 999;
+  top: 20px;
+  right: 30px;
+  padding: 5px;
+  background: black;
+  color: white;
+  border: 1px solid white;
+  cursor: pointer;
+
+  &:hover {
+    background: white;
+    color: black;
+  }
+}
+
+.signalisation {
+  position: absolute;
+  top: 60px;
+  transform: scale(1.7) rotate(90deg);
+  right: 280px;
+  z-index: 999;
+  color: white;
+  width: 100px;
+  height: 100px;
+  animation: signalisation-animation 3s infinite ease-in-out;
 }

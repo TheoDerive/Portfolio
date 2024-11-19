@@ -26,12 +26,13 @@ const FolderElement = ({
     y: 0,
   });
   const [asMove, setAsMove] = React.useState<boolean>(false);
+  const [isTutoActive, setIsTutoActive] = React.useState(true);
 
   const falseParentfRef = React.useRef<HTMLElement>(null);
   const childRef = React.useRef<HTMLElement>(null);
   const sendParentRef = parentRef ? parentRef : falseParentfRef;
 
-  const { tuto, setTuto } = useAppStore();
+  const { tuto, setTuto, setTutoInactive } = useAppStore();
   const { position, reset, handleClick, isClick } = useMove(
     initialPosition,
     true,
@@ -43,6 +44,12 @@ const FolderElement = ({
   );
   const { can_send_file_to } = useFilesGrid();
   const { newWindow } = useWindowPriority();
+
+  React.useEffect(() => {
+    const tutoIndex = tuto.find((t) => t.element === "folder");
+    if (!tutoIndex) return;
+    setIsTutoActive(tutoIndex.active);
+  }, [tuto]);
 
   React.useEffect(() => {
     if (!childRef.current) return;
@@ -133,11 +140,13 @@ const FolderElement = ({
 
   return (
     <article
-      onMouseDown={(mouse) => onClick(mouse)}
+      onMouseDown={(mouse) => (isTutoActive ? null : onClick(mouse))}
       onDoubleClick={() => handleDoubleClick()}
+      onMouseEnter={() => (isTutoActive ? setTutoInactive(true) : null)}
+      onMouseOut={() => (isTutoActive ? setTutoInactive(false) : null)}
       ref={childRef}
       className="folder"
-      id={`${folder.id}`}
+      id={`folder-${grid ? grid.id * 10 : ""}`}
       style={
         isClick
           ? {

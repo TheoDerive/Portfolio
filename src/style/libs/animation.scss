@@ -16,3 +16,13 @@
     opacity: 1;
   }
 }
+
+@keyframes signalisation-animation {
+  0%,
+  100% {
+    right: 260px;
+  }
+  50% {
+    right: 300px;
+  }
+}

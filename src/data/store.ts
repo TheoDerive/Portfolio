@@ -13,6 +13,10 @@ export const useAppStore = create<StoreInterface>((set) => ({
 
   tuto: [
     {
+      element: "start",
+      active: true,
+    },
+    {
       element: "file",
       active: true,
     },
