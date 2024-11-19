@@ -90,20 +90,6 @@ const FolderElement = ({
       setPath(folder.path);
     } else {
       newWindow(folder);
-
-      for (let i = 0; i < tuto.length; i++) {
-        const element = tuto[i];
-
-        if (element.element === "folder" && element.active) {
-          const newTuto = tuto.map((t) =>
-            t.element === element.element
-              ? { element: t.element, active: false }
-              : t,
-          );
-          setTuto(newTuto);
-          return;
-        }
-      }
     }
   };
 

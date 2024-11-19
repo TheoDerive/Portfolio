@@ -3,10 +3,10 @@ import { File, Folder } from "../type/filesGridType";
 export const pathElement: (File | Folder)[] = [
   {
     id: 3000,
-    name: "Console",
-    type: "console",
+    name: "Fichier",
+    type: "text",
     content: "",
-    path: "/Console",
+    path: "/Fichier",
     onDesktop: {
       id: 110,
     },

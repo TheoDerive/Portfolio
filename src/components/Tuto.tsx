@@ -13,7 +13,7 @@ const TutoComponent = ({
     y: (window.innerHeight / 8) * 2 - 68,
     x: 0,
   });
-  const [index, setIndex] = React.useState<string>("file");
+  const [index, setIndex] = React.useState<string>("start");
   const [gridSize, setGridSize] = React.useState<PositionType>({
     x: (window.innerWidth / 100) * 12,
     y: (window.innerHeight / 100) * 12,
@@ -26,58 +26,56 @@ const TutoComponent = ({
     const folder = document
       .querySelector(`#folder-100`)
       ?.getBoundingClientRect();
+    const header = document
+      .querySelector(`.header-window-active-type`)
+      ?.getBoundingClientRect();
+    let newBoxPosition;
 
     if (!folder || !file) return;
 
-    let newBoxPosition;
-
-    switch (index) {
-      case "file":
-        newBoxPosition = {
-          x: file.x,
-          y: file.y - 3,
-        };
-        break;
-
-      case "folder":
-        newBoxPosition = {
-          x: folder.x,
-          y: folder.y - 3,
-        };
-        break;
-
-      default:
-        newBoxPosition = {
-          x: 0,
-          y: 0,
-        };
-        break;
-    }
-
-    setBoxPosition(newBoxPosition);
-  }, [index]);
-
-  React.useEffect(() => {
-    for (let index = 0; index < tuto.length; index++) {
-      const element = tuto[index];
+    for (let i = 0; i < tuto.length; i++) {
+      const element = tuto[i];
 
       if (element.active) {
         setIndex(element.element);
 
-        if (element.elementActive) {
-          console.log(element.elementActive);
-          const findElement = document.querySelector(
-            `#file-${element.elementActive}`,
-          ) as HTMLElement;
-          console.log(findElement.getBoundingClientRect());
-          const elementPosition = findElement.getBoundingClientRect();
-          const newPosition: PositionType = {
-            x: Number(elementPosition.x),
-            y: Number(elementPosition.y) - 3,
-          };
+        switch (element.element) {
+          case "file":
+            newBoxPosition = {
+              x: file.x,
+              y: file.y - 3,
+            };
+            break;
 
-          setBoxPosition(newPosition);
+          case "folder":
+            newBoxPosition = {
+              x: folder.x,
+              y: folder.y - 3,
+            };
+            break;
+
+          case "header":
+            if (header) {
+              newBoxPosition = {
+                x: header.x,
+                y: header.y - 3,
+              };
+            } else {
+              newBoxPosition = {
+                x: 0,
+                y: 0,
+              };
+            }
+            break;
+
+          default:
+            newBoxPosition = {
+              x: 0,
+              y: 0,
+            };
+            break;
         }
+        setBoxPosition(newBoxPosition);
 
         return;
       }
@@ -85,6 +83,27 @@ const TutoComponent = ({
   }, [tuto]);
 
   React.useEffect(() => {
+    const header = document
+      .querySelector(`.header-window-active-type`)
+      ?.getBoundingClientRect();
+    if (index === "header" && header) {
+      const newGridSize = {
+        x: header.width,
+        y: header.height + 4,
+      };
+
+      setGridSize(newGridSize);
+      return;
+    } else if (index === "header" && !header) {
+      const newGridSize = {
+        x: 60,
+        y: 60,
+      };
+
+      setGridSize(newGridSize);
+      return;
+    }
+
     const grid = document.querySelector(".grid");
     if (!grid) return;
 
@@ -94,7 +113,7 @@ const TutoComponent = ({
     };
 
     setGridSize(grid_size);
-  }, [boxPosition]);
+  }, [boxPosition, index]);
 
   function nextTuto() {
     let isEnd = false;
@@ -128,11 +147,17 @@ const TutoComponent = ({
         return "Vous pouvez egalement double cliquer sur le dossier / fichier pour en voir son contenu";
 
       case "header":
-        return "Vous pouvez visualiser les fenetres, minimiser ou non";
+        return "Lors que vous avez des fenetres d'ouvertes, vous pouvez visualiser les fenetres, minimiser ou non";
 
       default:
         return "";
     }
+  }
+
+  function skipAllTuto() {
+    const newTuto = tuto.map((t) => ({ element: t.element, active: false }));
+    setTuto(newTuto);
+    setTutoPass(true);
   }
 
   return (
@@ -141,7 +166,7 @@ const TutoComponent = ({
         <section className="tuto-container">
           <section
             style={
-              index !== "header" && index !== "start"
+              index !== "start"
                 ? {
                     clipPath: `polygon(
     0 0,
@@ -163,42 +188,40 @@ ${boxPosition.x + gridSize.x}px ${boxPosition.y}px,
           ></section>
           <section
             style={
-              index === "header"
-                ? { top: "0px", left: "0px", width: "4.5%", height: "6%" }
-                : index === "start"
-                  ? {
-                      width: "0",
-                      height: "0",
-                      border: "0",
-                    }
-                  : { top: `${boxPosition.y}px`, left: `${boxPosition.x}px` }
+              index === "start"
+                ? {
+                    width: "0",
+                    height: "0",
+                    border: "0",
+                  }
+                : {
+                    top: `${boxPosition.y}px`,
+                    left: `${boxPosition.x}px`,
+                    width: `${gridSize.x}px`,
+                    height: `${gridSize.y}px`,
+                  }
             }
             className={`active-tuto-square ${index}-square`}
           />
           <p
             className={`help-message-${index} info-font`}
             style={
-              index === "header"
+              index === "start"
                 ? {
-                    top: `${boxPosition.y + 20}px`,
-                    left: `${boxPosition.x + gridSize.x - 40}px`,
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    width: "80vw",
+                    position: "absolute",
+                    color: "white",
+                    fontSize: "1.8rem",
+                    textAlign: "center",
+                    zIndex: "999",
                   }
-                : index === "start"
-                  ? {
-                      top: "50%",
-                      left: "50%",
-                      transform: "translate(-50%, -50%)",
-                      width: "80vw",
-                      position: "absolute",
-                      color: "white",
-                      fontSize: "1.8rem",
-                      textAlign: "center",
-                      zIndex: "999",
-                    }
-                  : {
-                      top: `${boxPosition.y + 20}px`,
-                      left: `${boxPosition.x + 10 + gridSize.x}px`,
-                    }
+                : {
+                    top: `${boxPosition.y + (index === "header" ? 5 : 20)}px`,
+                    left: `${boxPosition.x + 10 + gridSize.x}px`,
+                  }
             }
           >
             {getIndexContent()}
@@ -206,7 +229,9 @@ ${boxPosition.x + gridSize.x}px ${boxPosition.y}px,
           <button className="next-tuto info-font" onClick={() => nextTuto()}>
             Suivant
           </button>
-          <button className="pass-tuto info-font">Sauter la lecon</button>
+          <button onClick={() => skipAllTuto()} className="pass-tuto info-font">
+            Sauter la lecon
+          </button>
 
           {index === "start" ? (
             <span className="signalisation">

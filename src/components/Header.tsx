@@ -5,10 +5,17 @@ import { WindowIdentification } from "../type/windowType";
 import { useAppStore } from "../data/store";
 
 const Header = () => {
+  const [isTutoActive, setIsTutoActive] = React.useState(true);
   const { date } = useDesktopUtilities();
   const { activeWindows, unsnoozeWindow, setWindowPriority } =
     useWindowPriority();
-  const { tuto } = useAppStore();
+  const { tuto, setTutoInactive } = useAppStore();
+
+  React.useEffect(() => {
+    const tutoIndex = tuto.find((t) => t.element === "header");
+    if (!tutoIndex) return;
+    setIsTutoActive(tutoIndex.active);
+  }, [tuto]);
 
   const getWindowsActiveImage = (type: string): string => {
     switch (type) {
@@ -54,8 +61,8 @@ const Header = () => {
       return (
         <div
           className={`header-window-active-type ${key}-active-window`}
-          onMouseEnter={() => MouseEnterTutoHover()}
-          onMouseLeave={() => MouseLeaveTutoHover()}
+          onMouseEnter={() => (isTutoActive ? setTutoInactive(true) : null)}
+          onMouseOut={() => (isTutoActive ? setTutoInactive(false) : null)}
           onClick={() => {
             if (content.length !== 1) return;
 
@@ -70,32 +77,6 @@ const Header = () => {
     },
     [activeWindows],
   );
-
-  function MouseEnterTutoHover() {
-    const tutoHeader = tuto.filter((t) => t.element === "header");
-
-    if (tutoHeader[0].active) {
-      const tutoOverlay = document.querySelector(".header-tuto") as HTMLElement;
-      const tutoText = document.querySelector(
-        ".help-message-header",
-      ) as HTMLElement;
-      tutoOverlay.style.opacity = 0;
-      tutoText.style.opacity = 0;
-    }
-  }
-
-  function MouseLeaveTutoHover() {
-    const tutoHeader = tuto.filter((t) => t.element === "header");
-
-    if (tutoHeader[0].active) {
-      const tutoOverlay = document.querySelector(".header-tuto") as HTMLElement;
-      const tutoText = document.querySelector(
-        ".help-message-header",
-      ) as HTMLElement;
-      tutoOverlay.style.opacity = 1;
-      tutoText.style.opacity = 0.3;
-    }
-  }
 
   return (
     <header className="desktop-header">

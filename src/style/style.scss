@@ -18,7 +18,7 @@ $gridHeight: calc(100vh / 9);
 }
 
 html {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Pixelify Sans", sans-serif;
   background: $primaire;
 }
 
@@ -393,7 +393,8 @@ canvas {
   transform: translate(-50%, -50%);
   width: 70vw;
   height: 70vh;
-  background: $primaire;
+  background: rgba($color: $primaire, $alpha: 0.7);
+  backdrop-filter: blur(5px);
   z-index: 500;
   border-radius: 10px;
   border: 1px solid $primaire;
@@ -440,7 +441,14 @@ canvas {
       }
 
       .minimize-button {
+        transition: background 0.2s;
+        cursor: pointer;
+        background: transparent;
         position: relative;
+
+        &:hover {
+          background: rgba($color: white, $alpha: 0.3);
+        }
 
         &::after {
           content: "";
@@ -454,8 +462,26 @@ canvas {
         }
       }
 
-      .close-button {
+      .fullscreen-button {
+        transition: background 0.2s;
+        cursor: pointer;
+        background: transparent;
         position: relative;
+
+        &:hover {
+          background: rgba($color: white, $alpha: 0.3);
+        }
+      }
+
+      .close-button {
+        transition: background 0.2s;
+        cursor: pointer;
+        background: transparent;
+        position: relative;
+
+        &:hover {
+          background: red;
+        }
 
         &::after {
           content: "";
@@ -642,7 +668,7 @@ canvas {
   position: absolute;
   top: 0;
   left: 0;
-  background: rgba($color: black, $alpha: 0.6);
+  background: rgba($color: black, $alpha: 0.8);
   z-index: 998;
 }
 

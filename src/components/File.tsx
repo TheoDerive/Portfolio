@@ -5,7 +5,6 @@ import useMove from "../hooks/useMove";
 import { PositionType } from "../type/vectorType";
 import useWindowPriority from "../hooks/useWindowPriority";
 import { useAppStore } from "../data/store";
-import { TutoPass } from "../type/tutoTypes";
 
 const FileElement = ({
   file,
