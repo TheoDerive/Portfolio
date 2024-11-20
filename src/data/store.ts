@@ -19,10 +19,12 @@ export const useAppStore = create<StoreInterface>((set) => ({
     {
       element: "file",
       active: true,
+      elementActive: 110,
     },
     {
       element: "folder",
       active: true,
+      elementActive: 100,
     },
     {
       element: "header",

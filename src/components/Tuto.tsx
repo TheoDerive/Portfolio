@@ -1,8 +1,6 @@
 import React from "react";
 import { useAppStore } from "../data/store";
 import { PositionType } from "../type/vectorType";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 
 const TutoComponent = ({
   setTutoPass,
@@ -22,38 +20,19 @@ const TutoComponent = ({
   const { tuto, setTuto, tutoInactive } = useAppStore();
 
   React.useEffect(() => {
-    const file = document.querySelector(`#file-110`)?.getBoundingClientRect();
-    const folder = document
-      .querySelector(`#folder-100`)
-      ?.getBoundingClientRect();
     const header = document
       .querySelector(`.header-window-active-type`)
       ?.getBoundingClientRect();
     let newBoxPosition;
 
-    if (!folder || !file) return;
-
     for (let i = 0; i < tuto.length; i++) {
       const element = tuto[i];
+      console.log(element);
 
       if (element.active) {
         setIndex(element.element);
 
         switch (element.element) {
-          case "file":
-            newBoxPosition = {
-              x: file.x,
-              y: file.y - 3,
-            };
-            break;
-
-          case "folder":
-            newBoxPosition = {
-              x: folder.x,
-              y: folder.y - 3,
-            };
-            break;
-
           case "header":
             if (header) {
               newBoxPosition = {
@@ -69,18 +48,32 @@ const TutoComponent = ({
             break;
 
           default:
-            newBoxPosition = {
-              x: 0,
-              y: 0,
-            };
             break;
         }
-        setBoxPosition(newBoxPosition);
+        if (newBoxPosition) {
+          setBoxPosition(newBoxPosition);
+        }
 
         return;
       }
     }
-  }, [tuto]);
+  }, [tuto, index]);
+
+  React.useEffect(() => {
+    const target = tuto.filter((t) => t.element === index)[0];
+    console.log(index);
+    const elementToFind = document
+      .querySelector(`#${index}-${target.elementActive}`)
+      ?.getBoundingClientRect();
+
+    if (!elementToFind) return;
+
+    const newBoxPosition = {
+      x: elementToFind.x,
+      y: elementToFind.y,
+    };
+    setBoxPosition(newBoxPosition);
+  }, [tuto, index]);
 
   React.useEffect(() => {
     const header = document
@@ -123,7 +116,6 @@ const TutoComponent = ({
         return {
           element: t.element,
           active: false,
-          elementActive: t.elementActive,
         };
       } else {
         return t;
@@ -235,7 +227,7 @@ ${boxPosition.x + gridSize.x}px ${boxPosition.y}px,
 
           {index === "start" ? (
             <span className="signalisation">
-              <FontAwesomeIcon icon={faArrowUp} />
+              <img src="/public/images/Finger_pointing.svg" />
             </span>
           ) : null}
         </section>

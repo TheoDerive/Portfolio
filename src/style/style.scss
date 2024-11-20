@@ -4,6 +4,7 @@
 $primaire: #01161e;
 $secondaire: #f3e8ee;
 $background: $primaire;
+$default-cursor: url("/images/Cursor.svg");
 
 $gridWidth: calc(100vw / 14);
 $gridHeight: calc(100vh / 9);
@@ -20,6 +21,7 @@ $gridHeight: calc(100vh / 9);
 html {
   font-family: "Pixelify Sans", sans-serif;
   background: $primaire;
+  cursor: $default-cursor, default;
 }
 
 .desktop {
@@ -35,6 +37,83 @@ canvas {
 
 .info-font {
   font-family: "Pixelify Sans", sans-serif;
+}
+
+// Login
+.init-portfolio {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+  gap: 20px;
+
+  .login-image-container {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+
+    img {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  .input-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    .confirm-name {
+      width: calc(1rem + 20px);
+      height: calc(1rem + 14px);
+      border-radius: 0 5px 5px 0;
+      border: 0;
+      position: absolute;
+      left: 0;
+      opacity: 0;
+
+      &::after {
+        content: "";
+        position: absolute;
+        width: 10px;
+        height: 2px;
+        top: 37.5%;
+        background: black;
+        transform: rotate(45deg);
+      }
+
+      &::before {
+        content: "";
+        position: absolute;
+        width: 10px;
+        height: 2px;
+        bottom: 37.5%;
+        background: black;
+        transform: rotate(-45deg);
+      }
+    }
+  }
+
+  .login-input {
+    color: $primaire;
+    padding: 5px;
+    border-radius: 5px 0 0 5px;
+    font-size: 1rem;
+    border: 0;
+  }
 }
 
 // Desktop
@@ -773,12 +852,16 @@ canvas {
 
 .signalisation {
   position: absolute;
-  top: 60px;
-  transform: scale(1.7) rotate(90deg);
+  top: 15px;
+  transform: rotate(90deg);
   right: 280px;
   z-index: 999;
+  width: 40px;
+  height: 40px;
   color: white;
-  width: 100px;
-  height: 100px;
   animation: signalisation-animation 3s infinite ease-in-out;
+
+  img {
+    width: 100%;
+  }
 }
