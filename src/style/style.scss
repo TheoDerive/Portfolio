@@ -548,6 +548,22 @@ button {
       color: $secondaire;
       padding: 10px;
 
+      .return-file {
+        width: calc(100vw / 14);
+        height: calc(100vh / 9);
+        color: $secondaire;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        border: 1px solid transparent;
+
+        &:hover {
+          background: rgba($color: $secondaire, $alpha: 0.4);
+          border-color: $secondaire;
+        }
+      }
+
       .file,
       .folder {
         width: calc(100vw / 14);
