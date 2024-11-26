@@ -6,6 +6,7 @@ import { PositionType } from "../type/vectorType";
 import DominantFileInFolder from "./DominantFileInFolder";
 import useWindowPriority from "../hooks/useWindowPriority";
 import { useAppStore } from "../data/store";
+import useTuto from "../hooks/useTuto";
 
 const FolderElement = ({
   folder,
@@ -44,6 +45,7 @@ const FolderElement = ({
   );
   const { can_send_file_to } = useFilesGrid();
   const { newWindow } = useWindowPriority();
+  const { nextTuto } = useTuto();
 
   React.useEffect(() => {
     const tutoIndex = tuto.find((t) => t.element === "folder");
@@ -86,6 +88,10 @@ const FolderElement = ({
   };
 
   const handleDoubleClick = () => {
+    if (isTutoActive) {
+      nextTuto();
+      setTutoInactive(false);
+    }
     if (setPath) {
       setPath(folder.path);
     } else {

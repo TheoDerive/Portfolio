@@ -8,6 +8,9 @@ import {
 import { PositionType } from "../../type/vectorType";
 import useMove from "../../hooks/useMove";
 import useWindowPriority from "../../hooks/useWindowPriority";
+import { useAppStore } from "../../data/store";
+import useTuto from "../../hooks/useTuto";
+import useDesktopUtilities from "../../hooks/useDesktopUtilities";
 
 type Props = {
   windowProps: Window;
@@ -29,6 +32,7 @@ const WindowHeader = ({
   isFullScreen,
   setIsFullScreen,
 }: Props) => {
+  const [isTutoActive, setIsTutoActive] = React.useState(true);
   const windowHeaderRef = React.useRef<HTMLElement>(null);
 
   const { removeWindow, snoozeWindow } = useWindowPriority();
@@ -38,14 +42,29 @@ const WindowHeader = ({
     windowRef,
     windowHeaderRef,
   );
+  const { nextTuto } = useTuto();
+  const { changeCursor } = useDesktopUtilities();
 
   React.useEffect(() => {
     setPosition(position);
   }, [position]);
 
+  const { tuto, setTuto, setTutoInactive } = useAppStore();
+
+  React.useEffect(() => {
+    const tutoIndex = tuto.find((t) => t.element === "windows");
+    if (!tutoIndex) return;
+    setIsTutoActive(tutoIndex.active);
+  }, [tuto]);
+
   const handleMouseDown = React.useCallback(
     (mouse: React.MouseEvent<HTMLElement | MouseEvent>) => {
-      if (isFullScreen || !windowRef.current || !windowHeaderRef.current)
+      if (
+        isFullScreen ||
+        !windowRef.current ||
+        !windowHeaderRef.current ||
+        isTutoActive
+      )
         return;
       const mouseTarget = mouse.target as HTMLElement;
       if (
@@ -85,11 +104,16 @@ const WindowHeader = ({
       <div className="window-header-buttons">
         <button
           className="minimize-button"
-          onClick={() => snoozeWindow(windowProps.id)}
+          onClick={() => {
+            snoozeWindow(windowProps.id);
+            nextTuto();
+          }}
         ></button>
         <button
           className="fullscreen-button"
-          onClick={() => setIsFullScreen(!isFullScreen)}
+          onClick={() => (isTutoActive ? null : setIsFullScreen(!isFullScreen))}
+          onMouseEnter={() => (isTutoActive ? changeCursor("forbidden") : null)}
+          onMouseLeave={() => (isTutoActive ? changeCursor("default") : null)}
         >
           <FontAwesomeIcon
             icon={
@@ -102,9 +126,9 @@ const WindowHeader = ({
         </button>
         <button
           className="close-button"
-          onClick={() => {
-            removeWindow(windowProps.id);
-          }}
+          onClick={() => (isTutoActive ? null : removeWindow(windowProps.id))}
+          onMouseEnter={() => (isTutoActive ? changeCursor("forbidden") : null)}
+          onMouseLeave={() => (isTutoActive ? changeCursor("default") : null)}
         ></button>
       </div>
     </section>

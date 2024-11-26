@@ -27,7 +27,15 @@ export const useAppStore = create<StoreInterface>((set) => ({
       elementActive: 100,
     },
     {
+      element: "windows",
+      active: true,
+    },
+    {
       element: "header",
+      active: true,
+    },
+    {
+      element: "end",
       active: true,
     },
   ],

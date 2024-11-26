@@ -5,6 +5,7 @@ import useMove from "../hooks/useMove";
 import { PositionType } from "../type/vectorType";
 import useWindowPriority from "../hooks/useWindowPriority";
 import { useAppStore } from "../data/store";
+import useTuto from "../hooks/useTuto";
 
 const FileElement = ({
   file,
@@ -41,6 +42,7 @@ const FileElement = ({
   const { can_send_file_to } = useFilesGrid();
   const { newWindow } = useWindowPriority();
   const { setTutoInactive, setTuto, tuto } = useAppStore();
+  const { nextTuto } = useTuto();
 
   React.useEffect(() => {
     const tutoIndex = tuto.find((t) => t.element === "file");
@@ -113,7 +115,7 @@ const FileElement = ({
           : t,
       );
       setTuto(newTuto);
-
+      nextTuto();
       setTutoInactive(false);
     }
   };

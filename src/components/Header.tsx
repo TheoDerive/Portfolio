@@ -3,6 +3,7 @@ import useDesktopUtilities from "../hooks/useDesktopUtilities";
 import useWindowPriority from "../hooks/useWindowPriority";
 import { WindowIdentification } from "../type/windowType";
 import { useAppStore } from "../data/store";
+import useTuto from "../hooks/useTuto";
 
 const Header = () => {
   const [isTutoActive, setIsTutoActive] = React.useState(true);
@@ -10,6 +11,7 @@ const Header = () => {
   const { activeWindows, unsnoozeWindow, setWindowPriority } =
     useWindowPriority();
   const { tuto, setTutoInactive } = useAppStore();
+  const { nextTuto } = useTuto();
 
   React.useEffect(() => {
     const tutoIndex = tuto.find((t) => t.element === "header");
@@ -61,13 +63,14 @@ const Header = () => {
       return (
         <div
           className={`header-window-active-type ${key}-active-window`}
-          onMouseEnter={() => (isTutoActive ? setTutoInactive(true) : null)}
-          onMouseOut={() => (isTutoActive ? setTutoInactive(false) : null)}
           onClick={() => {
             if (content.length !== 1) return;
 
             unsnoozeWindow(content[0].id);
             setWindowPriority(content[0].id);
+            if (isTutoActive) {
+              nextTuto();
+            }
           }}
         >
           <span className="header-window-active-type-counter"></span>

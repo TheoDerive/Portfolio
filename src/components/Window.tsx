@@ -6,6 +6,7 @@ import useWindowPriority from "../hooks/useWindowPriority";
 import Console from "./Applications/Console";
 import TextReader from "./Applications/TextReading";
 import FileExplorer from "./Applications/FileExplorer";
+import { useAppStore } from "../data/store";
 
 type Props = {
   windowProps: Window;
@@ -50,7 +51,7 @@ const WindowContainer = ({ windowProps }: Props) => {
     return (
       <section
         ref={windowRef}
-        id={`${windowProps.id}`}
+        id={`window-${windowProps.id}`}
         onClick={() => setWindowPriority(windowProps.id)}
         className={isFullScreen ? "window window-fullscreen" : "window"}
         style={{

@@ -1,166 +1,25 @@
 import React from "react";
-import { useAppStore } from "../data/store";
-import { PositionType } from "../type/vectorType";
+import useTuto from "../hooks/useTuto";
 
-const TutoComponent = ({
-  setTutoPass,
-}: {
-  setTutoPass: (tuto: boolean) => void;
-}) => {
-  const [boxPosition, setBoxPosition] = React.useState<PositionType>({
-    y: (window.innerHeight / 8) * 2 - 68,
-    x: 0,
-  });
-  const [index, setIndex] = React.useState<string>("start");
-  const [gridSize, setGridSize] = React.useState<PositionType>({
-    x: (window.innerWidth / 100) * 12,
-    y: (window.innerHeight / 100) * 12,
-  });
+const TutoComponent = () => {
+  const {
+    index,
+    boxPosition,
+    gridSize,
+    nextTuto,
+    skipAllTuto,
+    getIndexContent,
+  } = useTuto();
 
-  const { tuto, setTuto, tutoInactive } = useAppStore();
-
-  React.useEffect(() => {
-    const header = document
-      .querySelector(`.header-window-active-type`)
-      ?.getBoundingClientRect();
-    let newBoxPosition;
-
-    for (let i = 0; i < tuto.length; i++) {
-      const element = tuto[i];
-      console.log(element);
-
-      if (element.active) {
-        setIndex(element.element);
-
-        switch (element.element) {
-          case "header":
-            if (header) {
-              newBoxPosition = {
-                x: header.x,
-                y: header.y - 3,
-              };
-            } else {
-              newBoxPosition = {
-                x: 0,
-                y: 0,
-              };
-            }
-            break;
-
-          default:
-            break;
-        }
-        if (newBoxPosition) {
-          setBoxPosition(newBoxPosition);
-        }
-
-        return;
-      }
-    }
-  }, [tuto, index]);
-
-  React.useEffect(() => {
-    const target = tuto.filter((t) => t.element === index)[0];
-    console.log(index);
-    const elementToFind = document
-      .querySelector(`#${index}-${target.elementActive}`)
-      ?.getBoundingClientRect();
-
-    if (!elementToFind) return;
-
-    const newBoxPosition = {
-      x: elementToFind.x,
-      y: elementToFind.y,
-    };
-    setBoxPosition(newBoxPosition);
-  }, [tuto, index]);
-
-  React.useEffect(() => {
-    const header = document
-      .querySelector(`.header-window-active-type`)
-      ?.getBoundingClientRect();
-    if (index === "header" && header) {
-      const newGridSize = {
-        x: header.width,
-        y: header.height + 4,
-      };
-
-      setGridSize(newGridSize);
-      return;
-    } else if (index === "header" && !header) {
-      const newGridSize = {
-        x: 60,
-        y: 60,
-      };
-
-      setGridSize(newGridSize);
-      return;
-    }
-
-    const grid = document.querySelector(".grid");
-    if (!grid) return;
-
-    const grid_size = {
-      x: grid.clientWidth,
-      y: grid.clientHeight,
-    };
-
-    setGridSize(grid_size);
-  }, [boxPosition, index]);
-
-  function nextTuto() {
-    let isEnd = false;
-    const newTuto = tuto.map((t, i) => {
-      if (t.element === index && t.active) {
-        if (!tuto[i + 1]) isEnd = true;
-        return {
-          element: t.element,
-          active: false,
-        };
-      } else {
-        return t;
-      }
-    });
-
-    setTuto(newTuto);
-    if (isEnd) {
-      setTutoPass(true);
-    }
-  }
-
-  function getIndexContent(): string {
-    switch (index) {
-      case "start":
-        return "Bonjour et bienvenu sur mon portfolio, avant de commencer nous allons voir une grande partie des fonctionnaliter possible sur le site";
-      case "file":
-        return "Vous pouvez deplacer les fichiers comme bon vous sembles";
-
-      case "folder":
-        return "Vous pouvez egalement double cliquer sur le dossier / fichier pour en voir son contenu";
-
-      case "header":
-        return "Lors que vous avez des fenetres d'ouvertes, vous pouvez visualiser les fenetres, minimiser ou non";
-
-      default:
-        return "";
-    }
-  }
-
-  function skipAllTuto() {
-    const newTuto = tuto.map((t) => ({ element: t.element, active: false }));
-    setTuto(newTuto);
-    setTutoPass(true);
-  }
-
+  React.useEffect(() => console.log(gridSize, index), [gridSize, index]);
   return (
     <>
-      {tutoInactive ? null : (
-        <section className="tuto-container">
-          <section
-            style={
-              index !== "start"
-                ? {
-                    clipPath: `polygon(
+      <section className="tuto-container">
+        <section
+          style={
+            index !== "start" && index !== "end"
+              ? {
+                  clipPath: `polygon(
     0 0,
     100% 0,
     100% 100%,
@@ -173,65 +32,78 @@ ${boxPosition.x + gridSize.x}px ${boxPosition.y}px,
     0 100%,
     0 0
   )`,
-                  }
-                : {}
-            }
-            className={`tuto-overlay ${index}-tuto`}
-          ></section>
-          <section
-            style={
-              index === "start"
+                }
+              : {}
+          }
+          className={`tuto-overlay ${index}-tuto`}
+        ></section>
+        <section
+          style={
+            index === "start" || index === "end"
+              ? {
+                  width: "0",
+                  height: "0",
+                  border: "0",
+                }
+              : {
+                  top: `${boxPosition.y}px`,
+                  left: `${boxPosition.x}px`,
+                  width: `${gridSize.x}px`,
+                  height: `${gridSize.y}px`,
+                }
+          }
+          className={`active-tuto-square ${index}-square`}
+        />
+        <p
+          className={`help-message-${index} info-font`}
+          style={
+            index === "start" || index === "end"
+              ? {
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: "80vw",
+                  position: "absolute",
+                  color: "white",
+                  fontSize: "1.8rem",
+                  textAlign: "center",
+                  zIndex: "999",
+                }
+              : index === "windows"
                 ? {
-                    width: "0",
-                    height: "0",
-                    border: "0",
-                  }
-                : {
-                    top: `${boxPosition.y}px`,
+                    top: `${boxPosition.y - 30}px`,
                     left: `${boxPosition.x}px`,
-                    width: `${gridSize.x}px`,
-                    height: `${gridSize.y}px`,
-                  }
-            }
-            className={`active-tuto-square ${index}-square`}
-          />
-          <p
-            className={`help-message-${index} info-font`}
-            style={
-              index === "start"
-                ? {
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    width: "80vw",
-                    position: "absolute",
-                    color: "white",
-                    fontSize: "1.8rem",
-                    textAlign: "center",
-                    zIndex: "999",
                   }
                 : {
                     top: `${boxPosition.y + (index === "header" ? 5 : 20)}px`,
                     left: `${boxPosition.x + 10 + gridSize.x}px`,
                   }
-            }
-          >
-            {getIndexContent()}
-          </p>
-          <button className="next-tuto info-font" onClick={() => nextTuto()}>
-            Suivant
-          </button>
+          }
+        >
+          {getIndexContent()}
+        </p>
+        <button
+          className={
+            index === "end"
+              ? "next-tuto info-font end-button"
+              : "next-tuto info-font"
+          }
+          onClick={() => nextTuto()}
+        >
+          {index === "end" ? "Bon voyage" : "Suivant"}
+        </button>
+        {index !== "end" && (
           <button onClick={() => skipAllTuto()} className="pass-tuto info-font">
-            Sauter la lecon
+            Sauter le tuto
           </button>
+        )}
 
-          {index === "start" ? (
-            <span className="signalisation">
-              <img src="/public/images/Finger_pointing.svg" />
-            </span>
-          ) : null}
-        </section>
-      )}
+        {index === "start" ? (
+          <span className="signalisation">
+            <img src="/public/images/Finger_pointing.svg" />
+          </span>
+        ) : null}
+      </section>
     </>
   );
 };
