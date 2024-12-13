@@ -1,10 +1,4 @@
-export type FileType =
-  | "text"
-  | "image"
-  | "code"
-  | "default"
-  | "folder"
-  | "console";
+export type FileType = "text" | "image" | "exe" | "default" | "folder";
 
 export type File = {
   id: number;
@@ -21,7 +15,7 @@ export type Folder = {
   id: number;
   name: string;
   path: string;
-  content: (File | Folder)[];
+  content: (File | Folder | string)[];
   type: FileType;
   onDesktop?: {
     id: number;

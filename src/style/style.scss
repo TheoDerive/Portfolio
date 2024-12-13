@@ -45,6 +45,44 @@ button {
   cursor: inherit !important;
 }
 
+// Intro
+.intro-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba($color: black, $alpha: 0.3);
+  }
+
+  .logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+    width: 30%;
+  }
+
+  .punchline {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+    color: white;
+    width: 50%;
+    text-align: center;
+  }
+}
+
 // Cursor
 .default-cursor {
   cursor: $default-cursor, default;
@@ -260,6 +298,7 @@ button {
   justify-content: center;
   border: 1px solid transparent;
   background: transparent;
+  text-align: center;
 
   &:hover {
     background: rgba($color: $secondaire, $alpha: 0.4);
@@ -315,6 +354,7 @@ button {
   justify-content: center;
   border: 1px solid transparent;
   background: transparent;
+  text-align: center;
 
   &:hover {
     background: rgba($color: $secondaire, $alpha: 0.4);
@@ -537,6 +577,20 @@ button {
 
     p {
       width: max-content;
+    }
+
+    .window-image-content {
+      width: 100%;
+      height: calc(100% - 40px);
+      overflow-y: auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-star;
+      flex-direction: column;
+
+      img {
+        width: 100%;
+      }
     }
 
     .window-content {

@@ -23,7 +23,6 @@ export default function useDesktopUtilities() {
   React.useEffect(() => {
     const html = document.querySelector("html");
 
-    console.log("pass");
     if (!html) return;
     html.classList.forEach((el) => {
       if (!el) return;
@@ -35,7 +34,6 @@ export default function useDesktopUtilities() {
   }, [cursorState]);
 
   const changeCursor = (type: CursorType) => {
-    console.log(type);
     setCursorState(type);
   };
 

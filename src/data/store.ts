@@ -24,7 +24,7 @@ export const useAppStore = create<StoreInterface>((set) => ({
     {
       element: "folder",
       active: true,
-      elementActive: 100,
+      elementActive: 10,
     },
     {
       element: "windows",
@@ -43,4 +43,7 @@ export const useAppStore = create<StoreInterface>((set) => ({
 
   tutoInactive: false,
   setTutoInactive: (tutoInactive) => set({ tutoInactive }),
+
+  intro: false,
+  setIntro: (intro) => set({ intro }),
 }));

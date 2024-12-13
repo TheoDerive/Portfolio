@@ -83,7 +83,11 @@ const FileElement = ({
   };
 
   const handleDoubleClick = () => {
-    newWindow(file);
+    if (file.type == "exe") {
+      window.open(file.content)?.focus();
+    } else {
+      newWindow(file);
+    }
   };
 
   const onReset = () => {

@@ -89,7 +89,7 @@ function useTuto() {
       setGridSize(newGridSize);
       return;
     }
-  }, [boxPosition, index]);
+  }, [index]);
 
   React.useEffect(() => {
     if (index === "windows") {

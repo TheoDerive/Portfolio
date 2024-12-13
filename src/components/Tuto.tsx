@@ -10,8 +10,6 @@ const TutoComponent = () => {
     skipAllTuto,
     getIndexContent,
   } = useTuto();
-
-  React.useEffect(() => console.log(gridSize, index), [gridSize, index]);
   return (
     <>
       <section className="tuto-container">

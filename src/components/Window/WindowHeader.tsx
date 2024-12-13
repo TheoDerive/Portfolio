@@ -55,7 +55,6 @@ const WindowHeader = ({
     const tutoIndex = tuto.find((t) => t.element === "windows");
     if (!tutoIndex) return;
     setIsTutoActive(tutoIndex.active);
-    console.log(tutoIndex);
   }, [tuto]);
 
   const handleMouseDown = React.useCallback(

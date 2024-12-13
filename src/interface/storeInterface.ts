@@ -17,4 +17,7 @@ export interface StoreInterface {
 
   tutoInactive: boolean;
   setTutoInactive: (tutoInactive: boolean) => void;
+
+  intro: boolean;
+  setIntro: (intro: boolean) => void;
 }

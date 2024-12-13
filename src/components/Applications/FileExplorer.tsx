@@ -17,7 +17,6 @@ const FileExplorer = ({ windowProps }: Props) => {
 
   const printContent = React.useCallback(() => {
     const content = getWindowContent(path);
-    console.log(content);
 
     if (content.length === 1 && isFolder(content[0])) {
       return content[0].content.map((element: File | Folder) =>
@@ -44,8 +43,6 @@ const FileExplorer = ({ windowProps }: Props) => {
       return test;
     }
   }, [path, getWindowContent]);
-
-  console.log(printContent());
 
   const prevFolder = React.useCallback(() => {
     const elements = path.split("/").slice(1, undefined);

@@ -22,7 +22,7 @@ export default function useWindowPriority() {
     const windowInit: State = {
       text: [],
       folder: [],
-      console: [],
+      image: [],
     };
 
     return windowInit;
@@ -32,7 +32,9 @@ export default function useWindowPriority() {
     (id: number) => {
       for (let index = 0; index < windows.length; index++) {
         const window = windows[index];
-        const windowDOM = document.getElementById(String(window.id));
+        const windowDOM = document.getElementById(
+          `window-${String(window.id)}`,
+        );
 
         if (windowDOM) {
           if (window.id === id) {
@@ -74,7 +76,7 @@ export default function useWindowPriority() {
       );
 
       if (windowAlreadyExist.length > 0) {
-        setWindowPriority(windowAlreadyExist[0].id);
+        setWindowPriority(windowAlreadyExist[windowAlreadyExist.length - 1].id);
         return;
       }
 

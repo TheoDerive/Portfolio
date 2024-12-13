@@ -6,7 +6,7 @@ import useWindowPriority from "../hooks/useWindowPriority";
 import Console from "./Applications/Console";
 import TextReader from "./Applications/TextReading";
 import FileExplorer from "./Applications/FileExplorer";
-import { useAppStore } from "../data/store";
+import ImageReader from "./Applications/ImageReader";
 
 type Props = {
   windowProps: Window;
@@ -40,8 +40,8 @@ const WindowContainer = ({ windowProps }: Props) => {
         case "text":
           return <TextReader windowProps={windowProps} />;
 
-        case "console":
-          return <Console />;
+        case "image":
+          return <ImageReader windowProps={windowProps} />;
 
         default:
           break;
